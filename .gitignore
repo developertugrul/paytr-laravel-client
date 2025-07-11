@@ -1,0 +1,38 @@
+# Composer vendor klasörü
+/vendor/
+composer.lock
+
+# Laravel config cache, logs, storage (paket olarak storage yoksa gerek yok)
+.env
+.env.*
+.phpunit.result.cache
+
+# IDE ve editör dosyaları
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Test coverage ve raporları
+coverage/
+clover.xml
+phpunit.xml
+phpunit.xml.dist
+
+# Kişisel notlar ve geçici dosyalar
+*.log
+*.tmp
+*.swp
+
+# Node.js (varsa)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Diğer
+*.bak
+*.orig

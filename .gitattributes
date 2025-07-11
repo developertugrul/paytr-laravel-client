@@ -1,0 +1,107 @@
+# Auto detect text files and perform LF normalization
+* text=auto
+
+# PHP files
+*.php text eol=lf
+
+# JSON files
+*.json text eol=lf
+
+# YAML files
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Markdown files
+*.md text eol=lf
+
+# Config files
+*.config text eol=lf
+*.ini text eol=lf
+
+# Documentation
+*.txt text eol=lf
+*.rst text eol=lf
+
+# Composer files
+composer.json text eol=lf
+composer.lock text eol=lf
+
+# Git files
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# License and readme
+LICENSE text eol=lf
+README.md text eol=lf
+CHANGELOG.md text eol=lf
+
+# Binary files (should not be modified)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.tar.gz binary
+*.rar binary
+
+# Archives
+*.7z binary
+*.bz2 binary
+*.gz binary
+*.tar binary
+*.tgz binary
+
+# Fonts
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+
+# Executables
+*.exe binary
+*.dll binary
+*.so binary
+*.dylib binary
+
+# Database files
+*.sqlite binary
+*.db binary
+
+# Log files
+*.log text eol=lf
+
+# Temporary files
+*.tmp text eol=lf
+*.temp text eol=lf
+*.swp text eol=lf
+*.swo text eol=lf
+
+# IDE files (if accidentally committed)
+.idea/ export-ignore
+.vscode/ export-ignore
+*.sublime-project export-ignore
+*.sublime-workspace export-ignore
+
+# OS generated files
+.DS_Store export-ignore
+Thumbs.db export-ignore
+ehthumbs.db export-ignore
+Desktop.ini export-ignore
+
+# Test files (if you want to exclude from distribution)
+tests/ export-ignore
+phpunit.xml export-ignore
+phpunit.xml.dist export-ignore
+.phpunit.result.cache export-ignore
+
+# Development files
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+
+# Package specific
+config/ export-ignore
+database/migrations/ export-ignore
+routes/ export-ignore
