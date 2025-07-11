@@ -38,8 +38,6 @@ class CardService
 
         $data = [
             'merchant_id' => $config['merchant_id'],
-            'merchant_key' => $config['merchant_key'],
-            'merchant_salt' => $config['merchant_salt'],
             'cc_owner' => $cardData['cc_owner'],
             'card_number' => $cardData['card_number'],
             'expiry_month' => $cardData['expiry_month'],
@@ -49,8 +47,7 @@ class CardService
         ];
 
         $hashStr = $data['merchant_id'] . $data['customer_id'] . $data['card_number'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'card/store', [
                 'form_params' => $data,
@@ -86,8 +83,6 @@ class CardService
 
         $data = [
             'merchant_id' => $config['merchant_id'],
-            'merchant_key' => $config['merchant_key'],
-            'merchant_salt' => $config['merchant_salt'],
             'token' => $token,
             'amount' => $paymentData['amount'],
             'currency' => $paymentData['currency'] ?? 'TL',
@@ -96,7 +91,7 @@ class CardService
         ];
 
         $hashStr = $data['merchant_id'] . $data['token'] . $data['amount'] . $data['merchant_oid'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
 
         try {
             $response = $this->http->post($config['api_url'] . 'card/pay', [
@@ -132,8 +127,6 @@ class CardService
         $config = Config::get('paytr');
         $data = [
             'merchant_id' => $config['merchant_id'],
-            'merchant_key' => $config['merchant_key'],
-            'merchant_salt' => $config['merchant_salt'],
             'token' => $token,
             'amount' => $paymentData['amount'],
             'currency' => $paymentData['currency'] ?? 'TL',
@@ -142,8 +135,7 @@ class CardService
             'recurring' => 1,
         ];
         $hashStr = $data['merchant_id'] . $data['token'] . $data['amount'] . $data['merchant_oid'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'card/pay', [
                 'form_params' => $data,
@@ -175,13 +167,11 @@ class CardService
 
         $data = [
             'merchant_id' => $config['merchant_id'],
-            'merchant_key' => $config['merchant_key'],
-            'merchant_salt' => $config['merchant_salt'],
             'customer_id' => $customerId,
         ];
 
         $hashStr = $data['merchant_id'] . $data['customer_id'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
 
         try {
             $response = $this->http->post($config['api_url'] . 'card/list', [
@@ -217,14 +207,11 @@ class CardService
 
         $data = [
             'merchant_id' => $config['merchant_id'],
-            'merchant_key' => $config['merchant_key'],
-            'merchant_salt' => $config['merchant_salt'],
             'token' => $token,
         ];
 
         $hashStr = $data['merchant_id'] . $data['token'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'card/delete', [
                 'form_params' => $data,

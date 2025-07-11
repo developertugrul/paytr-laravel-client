@@ -1,7 +1,7 @@
 <?php
 namespace Paytr\Tests\Feature;
 
-use Tests\TestCase;
+use Paytr\Tests\TestCase;
 use Paytr\Facades\Paytr;
 use Paytr\Exceptions\PaytrException;
 

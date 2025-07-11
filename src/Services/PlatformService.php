@@ -42,8 +42,7 @@ class PlatformService
             'description' => $payload['description'] ?? '',
         ];
         $hashStr = $data['merchant_id'] . $data['amount'] . $data['iban'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'platform/transfer', [
                 'form_params' => $data,
@@ -77,8 +76,7 @@ class PlatformService
             'transfer_id' => $transferId,
         ];
         $hashStr = $data['merchant_id'] . $data['transfer_id'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'platform/transfer/result', [
                 'form_params' => $data,

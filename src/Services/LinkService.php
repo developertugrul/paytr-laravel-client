@@ -47,8 +47,7 @@ class LinkService
             'lang' => $payload['lang'] ?? 'tr',
         ];
         $hashStr = $data['merchant_id'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['currency'] . $data['lang'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'link/create', [
                 'form_params' => $data,
@@ -82,8 +81,7 @@ class LinkService
             'link_id' => $linkId,
         ];
         $hashStr = $data['merchant_id'] . $data['link_id'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'link/delete', [
                 'form_params' => $data,
@@ -133,8 +131,7 @@ class LinkService
             'type' => $type,
         ];
         $hashStr = $data['merchant_id'] . $data['link_id'] . $data['type'];
-        $data['hash'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
-
+        $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
             $response = $this->http->post($config['api_url'] . 'link/notify', [
                 'form_params' => $data,
