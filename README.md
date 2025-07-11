@@ -277,8 +277,9 @@ Bu proje MIT lisansı altında lisanslanmıştır. Detaylar için `LICENSE` dosy
 ## 🆘 Destek
 
 - **GitHub Issues**: [GitHub Issues](https://github.com/developertugrul/paytr-laravel-client/issues)
-- **Email**: info@developertugrul.com
+- **Email**: iletisim@tugrulyildirim.com
 - **PayTR Destek**: [PayTR Destek Merkezi](https://www.paytr.com/destek)
+- **Whatsapp Destek**: [PayTR Destek Merkezi](https://wa.me/905312354229)
 
 ## 🔄 Changelog
 
