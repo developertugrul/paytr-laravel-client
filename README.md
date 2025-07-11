@@ -195,7 +195,16 @@ Paytr::platform()->createTransfer([
     'description' => 'Alt bayi ödemesi',
 ]);
 Paytr::platform()->getTransferResult('TRANSFER_ID');
-
+Paytr::platform()->getReturningPayments([
+    'date_start' => '2024-01-01',
+    'date_end' => '2024-01-31',
+]);
+Paytr::platform()->sendReturningPayment([
+    'trans_id' => '123456',
+    'amount' => 5000,
+    'iban' => 'TR000000000000000000000000',
+    'name' => 'John Doe',
+]);
 // 5. BKM Express ile ödeme
 Paytr::payment()->payWithBkmExpress([
     'merchant_oid' => 'ORDER123',
