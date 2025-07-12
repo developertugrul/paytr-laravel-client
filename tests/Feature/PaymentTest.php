@@ -91,4 +91,29 @@ class PaymentTest extends TestCase
             $this->assertInstanceOf(PaytrException::class, $e);
         }
     }
+
+
+    public function test_can_cancel_order()
+    {
+        $oid = 'TEST_ORDER_' . time();
+
+        try {
+            $result = Paytr::cancel()->cancel($oid);
+            $this->assertIsArray($result);
+        } catch (PaytrException $e) {
+            $this->assertInstanceOf(PaytrException::class, $e);
+        }
+    }
+
+    public function test_can_partial_cancel_order()
+    {
+        $oid = 'TEST_ORDER_' . time();
+
+        try {
+            $result = Paytr::cancel()->partialCancel($oid, 100);
+            $this->assertIsArray($result);
+        } catch (PaytrException $e) {
+            $this->assertInstanceOf(PaytrException::class, $e);
+        }
+    }
 }

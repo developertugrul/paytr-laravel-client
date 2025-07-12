@@ -1,4 +1,5 @@
 <?php
+
 namespace Paytr\Tests\Feature;
 
 use Paytr\Tests\TestCase;
@@ -7,6 +8,7 @@ use Paytr\Services\CardService;
 use Paytr\Services\LinkService;
 use Paytr\Services\PlatformService;
 use Paytr\Services\RefundService;
+use Paytr\Services\CancelService;
 use Paytr\Helpers\HashHelper;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
@@ -93,6 +95,10 @@ class ServicePayloadTest extends TestCase
             [RefundService::class, 'partialRefund', ['OID3', 500]],
             [RefundService::class, 'getRefundStatus', ['OID4']],
 
+            // CancelService
+            [CancelService::class, 'partialCancel', ['OID5', 500]],
+            [CancelService::class, 'cancel', ['OID6']],
+
             // PaymentService new methods
             [PaymentService::class, 'preProvision', [[
                 'merchant_oid' => 'OID5',
@@ -129,36 +135,40 @@ class ServicePayloadTest extends TestCase
 
     protected function computeHashString(string $class, string $method, array $params): string
     {
-        switch ($class.'::'.$method) {
-            case CardService::class.'::storeCard':
-                return $params['merchant_id'].$params['customer_id'].$params['card_number'];
-            case CardService::class.'::payWithCard':
-            case CardService::class.'::recurringPayment':
-                return $params['merchant_id'].$params['token'].$params['amount'].$params['merchant_oid'];
-            case CardService::class.'::listCards':
-                return $params['merchant_id'].$params['customer_id'];
-            case CardService::class.'::deleteCard':
-                return $params['merchant_id'].$params['token'];
-            case LinkService::class.'::createLink':
-                return $params['merchant_id'].$params['email'].$params['payment_amount'].$params['user_basket'].$params['currency'].$params['lang'];
-            case LinkService::class.'::deleteLink':
-                return $params['merchant_id'].$params['link_id'];
-            case LinkService::class.'::sendLinkNotification':
-                return $params['merchant_id'].$params['link_id'].$params['type'];
-            case PlatformService::class.'::createTransfer':
-                return $params['merchant_id'].$params['amount'].$params['iban'];
-            case PlatformService::class.'::getTransferResult':
-                return $params['merchant_id'].$params['transfer_id'];
-            case RefundService::class.'::refund':
-            case RefundService::class.'::partialRefund':
+        switch ($class . '::' . $method) {
+            case CardService::class . '::storeCard':
+                return $params['merchant_id'] . $params['customer_id'] . $params['card_number'];
+            case CardService::class . '::payWithCard':
+            case CardService::class . '::recurringPayment':
+                return $params['merchant_id'] . $params['token'] . $params['amount'] . $params['merchant_oid'];
+            case CardService::class . '::listCards':
+                return $params['merchant_id'] . $params['customer_id'];
+            case CardService::class . '::deleteCard':
+                return $params['merchant_id'] . $params['token'];
+            case LinkService::class . '::createLink':
+                return $params['merchant_id'] . $params['email'] . $params['payment_amount'] . $params['user_basket'] . $params['currency'] . $params['lang'];
+            case LinkService::class . '::deleteLink':
+                return $params['merchant_id'] . $params['link_id'];
+            case LinkService::class . '::sendLinkNotification':
+                return $params['merchant_id'] . $params['link_id'] . $params['type'];
+            case PlatformService::class . '::createTransfer':
+                return $params['merchant_id'] . $params['amount'] . $params['iban'];
+            case PlatformService::class . '::getTransferResult':
+                return $params['merchant_id'] . $params['transfer_id'];
+            case RefundService::class . '::refund':
+            case RefundService::class . '::partialRefund':
                 $amount = $params['amount'] ?? '';
-                return $params['merchant_id'].$params['merchant_oid'].$amount;
-            case RefundService::class.'::getRefundStatus':
-                return $params['merchant_id'].$params['merchant_oid'];
-            case PaymentService::class.'::preProvision':
-            case PaymentService::class.'::createEftIframe':
-            case PaymentService::class.'::payWithBkmExpress':
-                return $params['merchant_id'].$params['user_ip'].$params['merchant_oid'].$params['email'].$params['payment_amount'].$params['user_basket'].$params['currency'].$params['lang'];
+                return $params['merchant_id'] . $params['merchant_oid'] . $amount;
+            case RefundService::class . '::getRefundStatus':
+                return $params['merchant_id'] . $params['merchant_oid'];
+            case CancelService::class . '::cancel':
+            case CancelService::class . '::partialCancel':
+                $amount = $params['amount'] ?? '';
+                return $params['merchant_id'] . $params['merchant_oid'] . $amount;
+            case PaymentService::class . '::preProvision':
+            case PaymentService::class . '::createEftIframe':
+            case PaymentService::class . '::payWithBkmExpress':
+                return $params['merchant_id'] . $params['user_ip'] . $params['merchant_oid'] . $params['email'] . $params['payment_amount'] . $params['user_basket'] . $params['currency'] . $params['lang'];
         }
         return '';
     }

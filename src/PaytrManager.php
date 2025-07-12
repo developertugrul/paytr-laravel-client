@@ -6,6 +6,7 @@ use Paytr\Services\RefundService;
 use Paytr\Services\CardService;
 use Paytr\Services\LinkService;
 use Paytr\Services\PlatformService;
+use Paytr\Services\CancelService;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -42,6 +43,15 @@ class PaytrManager
     public function refundService()
     {
         return $this->app->make(RefundService::class);
+    }
+
+    /**
+     * İptal işlemleri servisi
+     * @return CancelService
+     */
+    public function cancelService()
+    {
+        return $this->app->make(CancelService::class);
     }
 
     /**

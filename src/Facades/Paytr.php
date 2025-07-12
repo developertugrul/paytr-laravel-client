@@ -38,6 +38,15 @@ class Paytr extends Facade
         return static::getFacadeRoot()->refundService();
     }
 
+
+    /**
+     * İptal işlemleri için shortcut
+     */
+    public static function cancel()
+    {
+        return static::getFacadeRoot()->cancelService();
+    }
+
     /**
      * Kart işlemleri için shortcut
      */

@@ -94,15 +94,16 @@ $token = Paytr::payment()->createIframeToken([
 $status = Paytr::payment()->getPaymentStatus('ORDER123');
 ```
 
-### İade İşlemleri
+### İptal İşlemleri
 
 ```php
-// Tam iade
-Paytr::refund()->refund('ORDER123');
+// Tam iptal
+Paytr::cancel()->cancel('ORDER123');
 
-// Kısmi iade
-Paytr::refund()->partialRefund('ORDER123', 5000); // 50 TL
+// Kısmi iptal
+Paytr::cancel()->partialCancel('ORDER123', 5000); // 50 TL
 ```
+
 
 ### Kart Saklama
 
