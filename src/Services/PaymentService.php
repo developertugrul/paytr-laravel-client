@@ -344,7 +344,7 @@ class PaymentService
             'cvv'            => $payload['cvv'] ?? '',
             'installment_count' => $payload['installment_count'] ?? 0,
             'non_3d'         => $payload['non_3d'] ?? 0,
-            'timeout_limit'  => $payload['timeout_limit'] ?? 0,
+            'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
         // Hash stringi PayTR dokümantasyonuna göre hazırlanır
@@ -380,7 +380,7 @@ class PaymentService
             'lang'           => $payload['lang'] ?? 'tr',
             'debug_on'       => $config['debug'] ? 1 : 0,
             'test_mode'      => $config['sandbox'] ? 1 : 0,
-            'timeout_limit'  => $payload['timeout_limit'] ?? 0,
+            'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
         // Hash stringi PayTR dokümantasyonuna göre hazırlanır

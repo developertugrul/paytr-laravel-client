@@ -46,6 +46,7 @@ PAYTR_SANDBOX=true
 PAYTR_WEBHOOK_SECRET=your_webhook_secret
 PAYTR_ALLOWED_IPS=192.168.1.1,192.168.1.2
 PAYTR_TIMEOUT=30
+PAYTR_DEFAULT_TIMEOUT=0
 PAYTR_VERIFY_SSL=true
 ```
 
@@ -72,6 +73,7 @@ $response = Paytr::payment()->pay([
     ],
     'installment_count' => 0,
     'non_3d' => 0,
+    // Süre sınırı isteğe bağlıdır, belirtilmezse PAYTR_DEFAULT_TIMEOUT kullanılır
     'timeout_limit' => 0,
 ]);
 
