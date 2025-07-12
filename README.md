@@ -133,6 +133,8 @@ Paytr::card()->deleteCard($cardToken);
 
 ### Webhook İşleme
 
+PayTR webhook'larının doğruluğunu kontrol etmek için `paytr.signature` middleware'ini kullanın. Middleware, gelen isteğin gövdesi ile `X-PayTR-Signature` başlığını karşılaştırarak imzayı doğrular.
+
 ```php
 // routes/paytr.php dosyasında
 Route::post('/paytr/webhook', [WebhookController::class, 'handle'])
