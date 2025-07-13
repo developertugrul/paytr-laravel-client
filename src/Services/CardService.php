@@ -85,7 +85,7 @@ class CardService
             'merchant_id' => $config['merchant_id'],
             'token' => $token,
             'amount' => $paymentData['amount'],
-            'currency' => $paymentData['currency'] ?? 'TL',
+            'currency' => $paymentData['currency'] ?? $config['default_currency'],
             'merchant_oid' => $paymentData['merchant_oid'],
             'installment_count' => $paymentData['installment_count'] ?? 0,
         ];
@@ -129,7 +129,7 @@ class CardService
             'merchant_id' => $config['merchant_id'],
             'token' => $token,
             'amount' => $paymentData['amount'],
-            'currency' => $paymentData['currency'] ?? 'TL',
+            'currency' => $paymentData['currency'] ?? $config['default_currency'],
             'merchant_oid' => $paymentData['merchant_oid'],
             'installment_count' => $paymentData['installment_count'] ?? 0,
             'recurring' => 1,

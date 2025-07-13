@@ -18,6 +18,8 @@ class PaymentTest extends TestCase
             'merchant_salt' => 'test_merchant_salt',
             'sandbox' => true,
             'debug' => true,
+            'default_currency' => 'TL',
+            'default_lang' => 'tr',
         ]);
     }
 

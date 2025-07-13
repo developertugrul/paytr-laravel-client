@@ -30,6 +30,8 @@ class ServicePayloadTest extends TestCase
             'merchant_key' => 'test_merchant_key',
             'merchant_salt' => 'test_merchant_salt',
             'api_url' => 'https://api.paytr.com/v1/',
+            'default_currency' => 'TL',
+            'default_lang' => 'tr',
         ]);
     }
 

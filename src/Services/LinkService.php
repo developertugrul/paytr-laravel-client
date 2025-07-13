@@ -43,8 +43,8 @@ class LinkService
             'user_address' => $payload['user_address'],
             'user_phone' => $payload['user_phone'],
             'user_basket' => base64_encode(json_encode($payload['basket'])),
-            'currency' => $payload['currency'] ?? 'TL',
-            'lang' => $payload['lang'] ?? 'tr',
+            'currency' => $payload['currency'] ?? $config['default_currency'],
+            'lang' => $payload['lang'] ?? $config['default_lang'],
         ];
         $hashStr = $data['merchant_id'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['currency'] . $data['lang'];
         $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);

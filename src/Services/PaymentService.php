@@ -326,7 +326,7 @@ class PaymentService
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
             'payment_amount' => $payload['amount'],
-            'currency'       => $payload['currency'] ?? 'TL',
+            'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
@@ -335,7 +335,7 @@ class PaymentService
             'user_basket'    => $this->encodeBasket($payload['basket']),
             'no_installment' => $payload['no_installment'] ?? 0,
             'max_installment'=> $payload['max_installment'] ?? 0,
-            'lang'           => $payload['lang'] ?? 'tr',
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
             'payment_type'   => $payload['payment_type'] ?? 'card',
             'cc_owner'       => $payload['cc_owner'] ?? '',
             'card_number'    => $payload['card_number'] ?? '',
@@ -368,7 +368,7 @@ class PaymentService
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
             'payment_amount' => $payload['amount'],
-            'currency'       => $payload['currency'] ?? 'TL',
+            'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
@@ -377,7 +377,7 @@ class PaymentService
             'user_basket'    => $this->encodeBasket($payload['basket']),
             'no_installment' => $payload['no_installment'] ?? 0,
             'max_installment'=> $payload['max_installment'] ?? 0,
-            'lang'           => $payload['lang'] ?? 'tr',
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
             'debug_on'       => $config['debug'] ? 1 : 0,
             'test_mode'      => $config['sandbox'] ? 1 : 0,
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
@@ -405,12 +405,12 @@ class PaymentService
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
             'payment_amount' => $payload['amount'],
-            'currency'       => $payload['currency'] ?? 'TL',
+            'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
             'user_basket'    => $this->encodeBasket($payload['basket']),
-            'lang'           => $payload['lang'] ?? 'tr',
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
         ];
         $hashStr = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['currency'] . $data['lang'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
@@ -448,12 +448,12 @@ class PaymentService
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
             'payment_amount' => $payload['amount'],
-            'currency'       => $payload['currency'] ?? 'TL',
+            'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
             'user_basket'    => $this->encodeBasket($payload['basket']),
-            'lang'           => $payload['lang'] ?? 'tr',
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
         ];
         $hashStr = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['currency'] . $data['lang'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
@@ -491,12 +491,12 @@ class PaymentService
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
             'payment_amount' => $payload['amount'],
-            'currency'       => $payload['currency'] ?? 'TL',
+            'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
             'user_basket'    => $this->encodeBasket($payload['basket']),
-            'lang'           => $payload['lang'] ?? 'tr',
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
         ];
         $hashStr = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['currency'] . $data['lang'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);

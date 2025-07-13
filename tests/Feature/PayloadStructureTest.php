@@ -24,6 +24,8 @@ class PayloadStructureTest extends TestCase
             'merchant_key' => 'test_merchant_key',
             'merchant_salt' => 'test_merchant_salt',
             'api_url' => 'https://example.com/api/',
+            'default_currency' => 'TL',
+            'default_lang' => 'tr',
         ]);
     }
 

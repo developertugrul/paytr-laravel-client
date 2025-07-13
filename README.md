@@ -50,6 +50,40 @@ PAYTR_DEFAULT_TIMEOUT=0
 PAYTR_VERIFY_SSL=true
 ```
 
+## 🔄 Versiyon Yönetimi
+
+Bu paket için versiyon yönetimi otomatik olarak yapılmaktadır. Yeni bir versiyon yayınlamak için:
+
+### Otomatik Versiyon Güncelleme
+
+```bash
+# Patch versiyonu (hata düzeltmeleri) - 1.0.0 -> 1.0.1
+php version-update.php patch
+
+# Minor versiyonu (yeni özellikler) - 1.0.0 -> 1.1.0
+php version-update.php minor
+
+# Major versiyonu (büyük değişiklikler) - 1.0.0 -> 2.0.0
+php version-update.php major
+```
+
+### Manuel Versiyon Güncelleme
+
+1. `composer.json` dosyasındaki `version` alanını güncelleyin
+2. Git tag oluşturun:
+```bash
+git add composer.json
+git commit -m "Bump version to 1.0.1"
+git tag -a v1.0.1 -m "Version 1.0.1"
+git push origin main --tags
+```
+
+### Versiyon Semantik Anlamları
+
+- **Patch (1.0.0 -> 1.0.1)**: Hata düzeltmeleri, güvenlik yamaları
+- **Minor (1.0.0 -> 1.1.0)**: Yeni özellikler, geriye uyumlu değişiklikler
+- **Major (1.0.0 -> 2.0.0)**: Büyük değişiklikler, geriye uyumsuz güncellemeler
+
 ## 🎯 Kullanım Örnekleri
 
 ### Temel Ödeme İşlemleri
