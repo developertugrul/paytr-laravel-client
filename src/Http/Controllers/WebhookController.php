@@ -26,6 +26,7 @@ class WebhookController
         // IP kontrolü
         if (!empty($config['allowed_ips'])) {
             $allowedIps = explode(',', $config['allowed_ips']);
+            $allowedIps = array_map('trim', $allowedIps);
             $clientIp = $request->ip();
 
             if (!in_array($clientIp, $allowedIps)) {
