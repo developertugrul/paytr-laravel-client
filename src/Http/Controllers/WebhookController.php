@@ -9,8 +9,18 @@ use Paytr\Events\PaymentSuccessEvent;
 use Paytr\Events\PaymentFailedEvent;
 use Paytr\Events\RefundSuccessEvent;
 
+/**
+ * WebhookController
+ * PayTR webhook bildirimlerini işler.
+ */
 class WebhookController
 {
+    /**
+     * Webhook bildirimini işler
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function handle(Request $request): Response
     {
         $config = Config::get('paytr');
@@ -54,6 +64,14 @@ class WebhookController
         return response('OK', 200);
     }
 
+    /**
+     * Webhook signature'ını doğrular
+     *
+     * @param string $payload
+     * @param string $signature
+     * @param array $config
+     * @return bool
+     */
     protected function verifySignature(string $payload, string $signature, array $config): bool
     {
         if (empty($signature) || empty($config['webhook_secret'])) {
@@ -65,6 +83,13 @@ class WebhookController
         return hash_equals($expectedSignature, $signature);
     }
 
+    /**
+     * Webhook event'ini işler
+     *
+     * @param array $data
+     * @return void
+     * @throws \Exception
+     */
     protected function processWebhook(array $data): void
     {
         try {
