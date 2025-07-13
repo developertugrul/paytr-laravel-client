@@ -21,6 +21,10 @@ class VerifyPaytrSignature
         $payload   = $request->getContent();
         $secret    = Config::get('paytr.webhook_secret');
 
+        if (empty($secret)) {
+            return response('Webhook secret not configured', 500);
+        }
+
         $expected = hash_hmac('sha256', $payload, $secret);
 
         if (empty($signature) || !hash_equals($expected, $signature)) {

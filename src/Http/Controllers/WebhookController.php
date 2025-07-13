@@ -23,6 +23,11 @@ class WebhookController
     {
         $config = Config::get('paytr');
 
+        if (empty($config['webhook_secret'])) {
+            Log::error('PayTR Webhook: webhook_secret not configured');
+            return response('Webhook secret not configured', 500);
+        }
+
         // IP kontrolü
         if (!empty($config['allowed_ips'])) {
             $allowedIps = explode(',', $config['allowed_ips']);
@@ -67,7 +72,7 @@ class WebhookController
      */
     protected function verifySignature(string $payload, string $signature, array $config): bool
     {
-        if (empty($signature)) {
+        if (empty($signature) || empty($config['webhook_secret'])) {
             return false;
         }
 

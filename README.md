@@ -50,6 +50,11 @@ PAYTR_DEFAULT_TIMEOUT=0
 PAYTR_VERIFY_SSL=true
 ```
 
+
+`PAYTR_WEBHOOK_SECRET` mutlaka tanımlanmalıdır, aksi halde gelen webhook
+istekleri imza doğrulamasından geçmeyecek ve reddedilecektir.
+
+
 ## 🔄 Versiyon Yönetimi
 
 Bu paket için versiyon yönetimi otomatik olarak yapılmaktadır. Yeni bir versiyon yayınlamak için:

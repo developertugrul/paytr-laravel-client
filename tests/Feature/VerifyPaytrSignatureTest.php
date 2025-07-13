@@ -33,4 +33,18 @@ class VerifyPaytrSignatureTest extends TestCase
 
         $response->assertStatus(403);
     }
+
+
+    public function test_missing_secret_rejected()
+    {
+        $this->app['config']->set('paytr.webhook_secret', null);
+        Route::post('/hook-missing', fn() => 'ok')->middleware('paytr.signature');
+
+        $payload = ['foo' => 'bar'];
+        $signature = hash_hmac('sha256', json_encode($payload), 'secret');
+
+        $response = $this->postJson('/hook-missing', $payload, ['X-PayTR-Signature' => $signature]);
+
+        $response->assertStatus(500);
+    }
 }
