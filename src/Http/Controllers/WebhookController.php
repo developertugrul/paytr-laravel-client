@@ -3,22 +3,14 @@ namespace Paytr\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Paytr\Helpers\HashHelper;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Log;
+use Paytr\Events\PaymentSuccessEvent;
+use Paytr\Events\PaymentFailedEvent;
+use Paytr\Events\RefundSuccessEvent;
 
-/**
- * WebhookController
- * PayTR webhook bildirimlerini işler.
- */
 class WebhookController
 {
-    /**
-     * Webhook bildirimini işler
-     *
-     * @param Request $request
-     * @return Response
-     */
     public function handle(Request $request): Response
     {
         $config = Config::get('paytr');
@@ -62,14 +54,6 @@ class WebhookController
         return response('OK', 200);
     }
 
-    /**
-     * Webhook signature'ını doğrular
-     *
-     * @param string $payload
-     * @param string $signature
-     * @param array $config
-     * @return bool
-     */
     protected function verifySignature(string $payload, string $signature, array $config): bool
     {
         if (empty($signature) || empty($config['webhook_secret'])) {
@@ -81,73 +65,29 @@ class WebhookController
         return hash_equals($expectedSignature, $signature);
     }
 
-    /**
-     * Webhook event'ini işler
-     *
-     * @param array $data
-     * @return void
-     */
     protected function processWebhook(array $data): void
     {
-        $event = $data['event'] ?? '';
-        $merchantOid = $data['merchant_oid'] ?? '';
-        $status = $data['status'] ?? '';
+        try {
+            $event = $data['event'] ?? '';
 
-        Log::info('PayTR Webhook received', [
-            'event' => $event,
-            'merchant_oid' => $merchantOid,
-            'status' => $status,
-        ]);
+            Log::info('PayTR Webhook received', [
+                'event' => $event,
+                'merchant_oid' => $data['merchant_oid'] ?? '',
+                'status' => $data['status'] ?? '',
+            ]);
 
-        // Event'e göre işlem yap
-        switch ($event) {
-            case 'payment_success':
-                $this->handlePaymentSuccess($data);
-                break;
-            case 'payment_failed':
-                $this->handlePaymentFailed($data);
-                break;
-            case 'refund_success':
-                $this->handleRefundSuccess($data);
-                break;
-            default:
-                Log::warning('PayTR Webhook: Bilinmeyen event', ['event' => $event]);
+            match ($event) {
+                'payment_success' => event(new PaymentSuccessEvent($data)),
+                'payment_failed' => event(new PaymentFailedEvent($data)),
+                'refund_success' => event(new RefundSuccessEvent($data)),
+                default => Log::warning('PayTR Webhook: Bilinmeyen event', ['event' => $event])
+            };
+        } catch (\Exception $e) {
+            Log::error('PayTR Webhook processing failed', [
+                'error' => $e->getMessage(),
+                'data' => $data
+            ]);
+            throw $e;
         }
-    }
-
-    /**
-     * Başarılı ödeme event'i
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function handlePaymentSuccess(array $data): void
-    {
-        // Ödeme başarılı işlemleri
-        Log::info('PayTR Payment Success', $data);
-    }
-
-    /**
-     * Başarısız ödeme event'i
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function handlePaymentFailed(array $data): void
-    {
-        // Ödeme başarısız işlemleri
-        Log::info('PayTR Payment Failed', $data);
-    }
-
-    /**
-     * Başarılı iade event'i
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function handleRefundSuccess(array $data): void
-    {
-        // İade başarılı işlemleri
-        Log::info('PayTR Refund Success', $data);
     }
 }
