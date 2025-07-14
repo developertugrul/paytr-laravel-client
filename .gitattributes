@@ -102,6 +102,5 @@ phpunit.xml.dist export-ignore
 .gitignore text eol=lf
 
 # Package specific
-config/ export-ignore
 database/migrations/ export-ignore
 routes/ export-ignore
