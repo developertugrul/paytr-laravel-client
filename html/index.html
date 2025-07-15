@@ -202,6 +202,32 @@
       </nav>
     </nav>
     <div class="container-fluid py-4">
+      <!-- Proje tanıtım kartı ve özellikler burada başlıyor -->
+      <div class="row justify-content-center mb-4">
+        <div class="col-lg-10">
+          <div class="card intro-card p-4 mb-4">
+            <div class="row align-items-center">
+              <div class="col-md-3 text-center mb-3 mb-md-0">
+                <img src="paytr.png" alt="PayTR Logo" class="img-fluid" style="max-height:90px;">
+              </div>
+              <div class="col-md-9">
+                <h1 class="display-5 fw-bold mb-2">PayTR Laravel Client</h1>
+                <span class="badge bg-success fs-6 mb-2">Açık Kaynak &amp; MIT Lisanslı</span>
+                <p class="lead mb-2">Laravel için modern, güvenli ve kapsamlı PayTR ödeme entegrasyon paketi. Tüm API fonksiyonları, eventler, middleware ve testler ile eksiksiz Türkçe dokümantasyon.</p>
+                <div class="d-flex flex-wrap gap-2 mb-2">
+                  <span class="badge bg-primary">Kolay Entegrasyon</span>
+                  <span class="badge bg-secondary">Kapsamlı Testler</span>
+                  <span class="badge bg-info text-dark">Güncel API</span>
+                  <span class="badge bg-warning text-dark">Detaylı Örnekler</span>
+                  <span class="badge bg-dark">Açık Kaynak</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-warning shadow-sm mb-4">
+            <strong>Önemli:</strong> Bu paket, PayTR'nin resmi API dokümantasyonuna <b>büyük oranda uyumlu</b> olsa da, bazı fonksiyon ve parametrelerde <b>farklılıklar</b> içerebilir. Özellikle <b>iade tutarı</b> (kuruş/ondalık), <b>BKM Express</b> entegrasyonu ve <b>sepet kodlama</b> gibi konularda detaylı açıklamalar ilgili bölümlerde yer almaktadır. Lütfen entegrasyon öncesi bu uyarıları dikkatlice inceleyin.
+          </div>
+      </div>
       <div class="d-lg-none mb-3">
         <button class="btn btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">Menü</button>
         <div class="collapse" id="mobileMenu">
@@ -856,6 +882,9 @@ $result = Paytr::payment()->createEftIframe($payload);
       </section>
       <section id="bkm-express" class="mt-5">
         <h2>BKM Express ile Ödeme (payWithBkmExpress)</h2>
+        <div class="alert alert-info mb-3">
+          <strong>UYARI:</strong> Bu paket, BKM Express ödemeleri için PayTR'nin resmi API'sinden farklı olarak ayrı bir <code>bkm/express</code> endpoint'i kullanır. <code>payment_type="bex"</code> parametresi gerekmez. Entegrasyonun kolaylaştırılması için bu yol tercih edilmiştir.
+        </div>
         <p><b>payWithBkmExpress(array $payload): array</b> fonksiyonu, BKM Express ile ödeme başlatmak için kullanılır.</p>
         <h4>Parametreler</h4>
         <ul>
@@ -894,24 +923,37 @@ $result = Paytr::payment()->payWithBkmExpress($payload);
       <section id="sepet-kodlama" class="mt-5">
         <h2>Sepet Kodlama (encodeBasket)</h2>
         <p><b>encodeBasket(array $basket): string</b> fonksiyonu, ödeme işlemlerinde kullanılacak sepet dizisini PayTR API'nin beklediği şekilde base64 ile kodlar.</p>
+        <div class="alert alert-warning mt-3">
+          <strong>Not:</strong> <code>encodeBasket</code> metodu doğrudan çağrılamaz. Bu metot <b>protected</b> olarak tanımlıdır ve genellikle ödeme işlemleri sırasında paket tarafından otomatik olarak kullanılır. Dışarıdan erişmek isterseniz, kendi yardımcı fonksiyonunuzu yazabilir veya paketi fork edip metodu public yapabilirsiniz.
+        </div>
         <h4>Parametreler</h4>
         <ul>
           <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
         </ul>
         <h4>Dönüş Değeri</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$encoded = Paytr::payment()->encodeBasket($basket);
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// <b>UYARI:</b> Bu örnek doğrudan çalışmaz, encodeBasket protected olduğu için dışarıdan erişilemez.
+// $encoded = Paytr::payment()->encodeBasket($basket);
 // $encoded: base64 kodlu sepet
 </code></pre></div>
         <h4>Örnek: Sepet Kodlama</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$basket = [
+        <div class="alert alert-info mb-2">
+          <b>Not:</b> Sepet kodlama işlemi ödeme fonksiyonları tarafından otomatik olarak yapılır. Kendi kodunuzda kullanmak isterseniz, aşağıdaki gibi bir yardımcı fonksiyon yazabilirsiniz:
+        </div>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">function encodeBasket(array $basket): string {
+    return base64_encode(json_encode($basket));
+}
+$basket = [
     ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
     ['name' => 'Diğer Ürün', 'price' => 5000, 'quantity' => 2],
 ];
-$encoded = Paytr::payment()->encodeBasket($basket);
+$encoded = encodeBasket($basket);
 </code></pre></div>
       </section>
       <section id="iade" class="mt-5">
         <h2>İade (refund)</h2>
+        <div class="alert alert-info mb-3">
+          <strong>UYARI:</strong> Bu paket, <b>iade tutarını kuruş (integer)</b> cinsinden işler. Yani 10 TL için <code>1000</code> yazılmalıdır. PayTR'nin resmi API'sinde ise <code>return_amount</code> parametresi <b>ondalık string</b> (ör: "10.00") olarak gönderilir. Lütfen bu farklılığa dikkat edin.
+        </div>
         <p><b>refund(string $merchantOid): array</b> fonksiyonu, bir ödemenin tamamının iadesini başlatır.</p>
         <h4>Parametreler</h4>
         <ul>
@@ -938,6 +980,9 @@ try {
       </section>
       <section id="kismi-iade" class="mt-5">
         <h2>Kısmi İade (partialRefund)</h2>
+        <div class="alert alert-info mb-3">
+          <strong>UYARI:</strong> Bu paket, <b>kısmi iade tutarını kuruş (integer)</b> cinsinden işler. Yani 10 TL için <code>1000</code> yazılmalıdır. PayTR'nin resmi API'sinde ise <code>return_amount</code> parametresi <b>ondalık string</b> (ör: "10.00") olarak gönderilir. Lütfen bu farklılığa dikkat edin.
+        </div>
         <p><b>partialRefund(string $merchantOid, int $amount): array</b> fonksiyonu, bir ödemenin belirli bir tutarının iadesini başlatır.</p>
         <h4>Parametreler</h4>
         <ul>
