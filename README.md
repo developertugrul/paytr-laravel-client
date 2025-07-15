@@ -1,3 +1,12 @@
+> **ℹ️ Kapsamlı Türkçe Dokümantasyon:**
+>
+> Bu paketin tüm fonksiyonlarını, kullanım senaryolarını ve testlerini detaylıca incelemek için modern, interaktif HTML dokümantasyonunu kullanabilirsiniz:
+>
+> - `html/index.html` dosyasını tarayıcınızda açın.
+> - Veya çevrimiçi olarak: [https://tugrulyildirim.com/opensource/paytr-laravel-client](https://tugrulyildirim.com/opensource/paytr-laravel-client)
+>
+> **Not:** Bu paket MIT lisansı ile yayınlanmıştır ve tamamen açık kaynaklıdır (opensource). Dilediğiniz gibi kullanabilir, dağıtabilir ve geliştirebilirsiniz.
+
 # PayTR Laravel Client
 
 Laravel için güncel, güvenli ve kapsamlı PayTR ödeme entegrasyon paketi. Güncel PayTR API dokümantasyonuna tam uyumlu.

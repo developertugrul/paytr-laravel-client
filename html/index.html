@@ -1,0 +1,1735 @@
+<!doctype html>
+<html lang="tr" data-bs-theme="dark">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Laravel için güvenli, modern ve kapsamlı PayTR ödeme entegrasyon paketi. Tüm API fonksiyonları, testler ve detaylı Türkçe dokümantasyon.">
+    <meta name="keywords" content="PayTR, Laravel, ödeme, PHP, ödeme entegrasyonu, kart saklama, iade, webhook, açık kaynak, dokümantasyon, API">
+    <meta name="author" content="Tugrul Yildirim">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://tugrulyildirim.com/opensource/paytr-laravel-client">
+
+    <!-- OpenGraph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="PayTR Laravel Client - Kapsamlı Türkçe Dokümantasyon">
+    <meta property="og:description" content="Laravel için güvenli, modern ve kapsamlı PayTR ödeme entegrasyon paketi. Tüm API fonksiyonları, testler ve detaylı Türkçe dokümantasyon.">
+    <meta property="og:url" content="https://tugrulyildirim.com/opensource/paytr-laravel-client">
+    <meta property="og:site_name" content="PayTR Laravel Client">
+    <meta property="og:locale" content="tr_TR">
+    <meta property="og:image" content="https://tugrulyildirim.com/opensource/paytr-laravel-client/paytr.png">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="PayTR Laravel Client - Kapsamlı Türkçe Dokümantasyon">
+    <meta name="twitter:description" content="Laravel için güvenli, modern ve kapsamlı PayTR ödeme entegrasyon paketi. Tüm API fonksiyonları, testler ve detaylı Türkçe dokümantasyon.">
+    <meta name="twitter:image" content="https://tugrulyildirim.com/opensource/paytr-laravel-client/paytr.png">
+    <meta name="twitter:site" content="@tugrulyildirim">
+    <meta name="twitter:creator" content="@tugrulyildirim">
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TechArticle",
+      "headline": "PayTR Laravel Client - Kapsamlı Türkçe Dokümantasyon",
+      "description": "Laravel için güvenli, modern ve kapsamlı PayTR ödeme entegrasyon paketi. Tüm API fonksiyonları, testler ve detaylı Türkçe dokümantasyon.",
+      "image": "https://tugrulyildirim.com/opensource/paytr-laravel-client/paytr.png",
+      "author": {
+        "@type": "Person",
+        "name": "Tugrul Yildirim",
+        "url": "https://tugrulyildirim.com"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Tugrul Yildirim",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://tugrulyildirim.com/opensource/paytr-laravel-client/paytr.png"
+        }
+      },
+      "inLanguage": "tr-TR",
+      "url": "https://tugrulyildirim.com/opensource/paytr-laravel-client"
+    }
+    </script>
+    <title>PayTR Laravel Client Dökümantasyonu</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      html, body { font-family: 'Inter', sans-serif !important; }
+      body { padding-left: 260px; background: var(--bs-body-bg); color: var(--bs-body-color); }
+      .sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 250px;
+        background: var(--bs-tertiary-bg, #f8f9fa);
+        color: var(--bs-body-color);
+        padding: 2rem 1rem 1rem 1rem;
+        overflow-y: auto;
+        z-index: 1000;
+        border-right: 1px solid var(--bs-border-color, #dee2e6);
+      }
+      .sidebar .nav-link { color: var(--bs-body-color); }
+      .sidebar .nav-link.active, .sidebar .nav-link:hover { background: var(--bs-secondary-bg, #e9ecef); color: #0d6efd; }
+      .copy-btn {
+        position: absolute;
+        top: 8px; right: 8px;
+        background: var(--bs-secondary-bg, #e9ecef); color: var(--bs-body-color);
+        border: none; border-radius: 4px;
+        padding: 2px 8px; font-size: 0.9em;
+        cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        z-index: 99;
+      }
+      .copy-btn:hover { opacity: 1; }
+      pre { position: relative; }
+      .navbar-brand .tugrul { color: var(--bs-emphasis-color, #000); font-weight: 700; letter-spacing: 1px; transition: color 0.2s; }
+      .navbar-brand .yildirim { color: #dc3545; font-weight: 700; letter-spacing: 1px; }
+      .navbar-nav .nav-link { color: var(--bs-body-color) !important; font-weight: 500; }
+      .navbar-nav .nav-link:hover { color: #0d6efd !important; }
+      .navbar .btn-coffee { background: #ffb300; color: #222; font-weight: 600; border-radius: 20px; margin-left: 10px; }
+      .navbar .btn-coffee:hover { background: #ff9800; color: #fff; }
+      .navbar .icon-btn { background: none; border: none; color: var(--bs-body-color); font-size: 1.3em; margin-left: 10px; }
+      .navbar .icon-btn:hover { color: #0d6efd; }
+      .navbar { font-family: 'Inter', sans-serif; background: var(--bs-body-bg) !important; }
+      @media (max-width: 991px) {
+        body { padding-left: 0; }
+        .sidebar { position: static; width: 100%; border-right: none; }
+      }
+      .feature-item {
+        background: var(--bs-card-bg, #fff) !important;
+        color: var(--bs-body-color, #212529) !important;
+      }
+      [data-bs-theme="dark"] .feature-item {
+        background: var(--bs-card-bg, #23272b) !important;
+        color: var(--bs-body-color, #fff) !important;
+      }
+      .intro-card {
+        background: var(--bs-card-bg, #fff) !important;
+        color: var(--bs-body-color, #212529) !important;
+        box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.08);
+        transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      }
+      [data-bs-theme="dark"] .intro-card {
+        background: var(--bs-card-bg, #23272b) !important;
+        color: var(--bs-body-color, #fff) !important;
+        box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,0.25);
+      }
+    </style>
+    <script>
+      function scrollToCoffee() {
+        document.getElementById('kahve-ismarla').scrollIntoView({ behavior: 'smooth' });
+      }
+      function toggleTheme() {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-bs-theme') === 'dark';
+        html.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+        // Logo değişimi için
+        const logo = document.getElementById('tugrul-logo');
+        if (logo) {
+          logo.style.color = isDark ? '#000' : '#fff';
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm" style="z-index:2000;">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center" href="https://tugrulyildirim.com" target="_blank">
+          <span class="tugrul" id="tugrul-logo">TUGRUL</span><span class="yildirim ms-1">YILDIRIM</span>
+        </a>
+        <div class="ms-auto d-flex align-items-center">
+          <a class="icon-btn" href="https://wa.me/905312354229" target="_blank" title="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+          <a class="icon-btn" href="https://www.linkedin.com/in/tugrulyildirim/" target="_blank" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+          <a class="icon-btn" href="tel:+905312354229" title="Telefon"><i class="bi bi-telephone"></i></a>
+          <a class="icon-btn" href="mailto:iletisim@tugrulyildirim.com" title="E-posta"><i class="bi bi-envelope"></i></a>
+          <button class="icon-btn" onclick="toggleTheme()" title="Koyu/Açık Mod"><i class="bi bi-moon-stars" id="theme-icon"></i></button>
+          <button class="btn btn-coffee" onclick="scrollToCoffee()">Kahve Ismarla</button>
+        </div>
+      </div>
+    </nav>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <div style="height:64px;"></div>
+    <nav class="sidebar d-none d-lg-block">
+      <h4 class="mb-4 mt-5">PayTR Laravel Client</h4>
+      <nav class="nav flex-column">
+        <a class="nav-link" href="#aciklama">Açıklama</a>
+        <a class="nav-link" href="#kurulum">Kurulum</a>
+        <a class="nav-link" href="#kullanim">Kullanım</a>
+        <a class="nav-link" href="#odeme-yapma">Ödeme Yapma</a>
+        <a class="nav-link" href="#iframe-odeme">iFrame ile Ödeme</a>
+        <a class="nav-link" href="#odeme-durumu">Ödeme Durumu Sorgulama</a>
+        <a class="nav-link" href="#taksit-oranlari">Taksit Oranları Sorgulama</a>
+        <a class="nav-link" href="#bin-sorgulama">BIN Sorgulama</a>
+        <a class="nav-link" href="#islem-detayi">İşlem Detayı Sorgulama</a>
+        <a class="nav-link" href="#odeme-raporu">Ödeme Raporu Sorgulama</a>
+        <a class="nav-link" href="#odeme-detayi">Ödeme Detayı Sorgulama</a>
+        <a class="nav-link" href="#on-provizyon">Ön Provizyon (preProvision)</a>
+        <a class="nav-link" href="#eft-iframe">EFT iFrame (createEftIframe)</a>
+        <a class="nav-link" href="#bkm-express">BKM Express ile Ödeme (payWithBkmExpress)</a>
+        <a class="nav-link" href="#sepet-kodlama">Sepet Kodlama (encodeBasket)</a>
+        <a class="nav-link" href="#iade">İade (refund)</a>
+        <a class="nav-link" href="#kismi-iade">Kısmi İade (partialRefund)</a>
+        <a class="nav-link" href="#iade-durumu">İade Durumu Sorgulama (getRefundStatus)</a>
+        <a class="nav-link" href="#iptal">İptal (cancel)</a>
+        <a class="nav-link" href="#kismi-iptal">Kısmi İptal (partialCancel)</a>
+        <a class="nav-link" href="#kart-kaydet">Kart Kaydet (storeCard)</a>
+        <a class="nav-link" href="#kart-ile-odeme">Kart ile Ödeme (payWithCard)</a>
+        <a class="nav-link" href="#tekrarlayan-odeme">Tekrarlayan Ödeme (recurringPayment)</a>
+        <a class="nav-link" href="#kartlari-listele">Kartları Listele (listCards)</a>
+        <a class="nav-link" href="#kart-sil">Kart Sil (deleteCard)</a>
+        <a class="nav-link" href="#link-olustur">Link ile Ödeme Oluştur (createLink)</a>
+        <a class="nav-link" href="#link-sil">Link Sil (deleteLink)</a>
+        <a class="nav-link" href="#link-callback">Link Callback Doğrulama (verifyCallback)</a>
+        <a class="nav-link" href="#link-bildirim">Link Bildirim Gönder (sendLinkNotification)</a>
+        <a class="nav-link" href="#servisler">Servisler</a>
+        <a class="nav-link" href="#eventler">Eventler</a>
+        <a class="nav-link" href="#middleware">Middleware</a>
+        <a class="nav-link" href="#testler">Testler</a>
+        <a class="nav-link" href="#platform-transfer">Platform Transfer Oluştur (createTransfer)</a>
+        <a class="nav-link" href="#platform-sonuc">Platform Transfer Sonucu (getTransferResult)</a>
+        <a class="nav-link" href="#platform-iadeler">Platform İade Listesi (getReturningPayments)</a>
+        <a class="nav-link" href="#platform-iade-gonder">Platform İade Gönder (sendReturningPayment)</a>
+        <a class="nav-link" href="#platform-callback">Platform Callback İşle (handleReturningCallback)</a>
+        <a class="nav-link" href="#platform-callback-dogrula">Platform Callback Doğrulama (verifyCallback)</a>
+        <a class="nav-link" href="#event-payment-success">PaymentSuccessEvent</a>
+        <a class="nav-link" href="#event-payment-failed">PaymentFailedEvent</a>
+        <a class="nav-link" href="#event-refund-success">RefundSuccessEvent</a>
+        <a class="nav-link" href="#middleware-verify-signature">paytr.signature Middleware</a>
+        <a class="nav-link" href="#webhook-controller">WebhookController</a>
+        <a class="nav-link" href="#testler-detay">Testler (Detaylı)</a>
+      </nav>
+    </nav>
+    <div class="container-fluid py-4">
+      <div class="d-lg-none mb-3">
+        <button class="btn btn-outline-light" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">Menü</button>
+        <div class="collapse" id="mobileMenu">
+          <nav class="nav flex-column mt-2">
+            <a class="nav-link" href="#aciklama">Açıklama</a>
+            <a class="nav-link" href="#kurulum">Kurulum</a>
+            <a class="nav-link" href="#kullanim">Kullanım</a>
+            <a class="nav-link" href="#odeme-yapma">Ödeme Yapma</a>
+            <a class="nav-link" href="#iframe-odeme">iFrame ile Ödeme</a>
+            <a class="nav-link" href="#odeme-durumu">Ödeme Durumu Sorgulama</a>
+            <a class="nav-link" href="#taksit-oranlari">Taksit Oranları Sorgulama</a>
+            <a class="nav-link" href="#bin-sorgulama">BIN Sorgulama</a>
+            <a class="nav-link" href="#islem-detayi">İşlem Detayı Sorgulama</a>
+            <a class="nav-link" href="#odeme-raporu">Ödeme Raporu Sorgulama</a>
+            <a class="nav-link" href="#odeme-detayi">Ödeme Detayı Sorgulama</a>
+            <a class="nav-link" href="#on-provizyon">Ön Provizyon (preProvision)</a>
+            <a class="nav-link" href="#eft-iframe">EFT iFrame (createEftIframe)</a>
+            <a class="nav-link" href="#bkm-express">BKM Express ile Ödeme (payWithBkmExpress)</a>
+            <a class="nav-link" href="#sepet-kodlama">Sepet Kodlama (encodeBasket)</a>
+            <a class="nav-link" href="#iade">İade (refund)</a>
+            <a class="nav-link" href="#kismi-iade">Kısmi İade (partialRefund)</a>
+            <a class="nav-link" href="#iade-durumu">İade Durumu Sorgulama (getRefundStatus)</a>
+            <a class="nav-link" href="#iptal">İptal (cancel)</a>
+            <a class="nav-link" href="#kismi-iptal">Kısmi İptal (partialCancel)</a>
+            <a class="nav-link" href="#kart-kaydet">Kart Kaydet (storeCard)</a>
+            <a class="nav-link" href="#kart-ile-odeme">Kart ile Ödeme (payWithCard)</a>
+            <a class="nav-link" href="#tekrarlayan-odeme">Tekrarlayan Ödeme (recurringPayment)</a>
+            <a class="nav-link" href="#kartlari-listele">Kartları Listele (listCards)</a>
+            <a class="nav-link" href="#kart-sil">Kart Sil (deleteCard)</a>
+            <a class="nav-link" href="#link-olustur">Link ile Ödeme Oluştur (createLink)</a>
+            <a class="nav-link" href="#link-sil">Link Sil (deleteLink)</a>
+            <a class="nav-link" href="#link-callback">Link Callback Doğrulama (verifyCallback)</a>
+            <a class="nav-link" href="#link-bildirim">Link Bildirim Gönder (sendLinkNotification)</a>
+            <a class="nav-link" href="#servisler">Servisler</a>
+            <a class="nav-link" href="#eventler">Eventler</a>
+            <a class="nav-link" href="#middleware">Middleware</a>
+            <a class="nav-link" href="#testler">Testler</a>
+            <a class="nav-link" href="#platform-transfer">Platform Transfer Oluştur (createTransfer)</a>
+            <a class="nav-link" href="#platform-sonuc">Platform Transfer Sonucu (getTransferResult)</a>
+            <a class="nav-link" href="#platform-iadeler">Platform İade Listesi (getReturningPayments)</a>
+            <a class="nav-link" href="#platform-iade-gonder">Platform İade Gönder (sendReturningPayment)</a>
+            <a class="nav-link" href="#platform-callback">Platform Callback İşle (handleReturningCallback)</a>
+            <a class="nav-link" href="#platform-callback-dogrula">Platform Callback Doğrulama (verifyCallback)</a>
+            <a class="nav-link" href="#event-payment-success">PaymentSuccessEvent</a>
+            <a class="nav-link" href="#event-payment-failed">PaymentFailedEvent</a>
+            <a class="nav-link" href="#event-refund-success">RefundSuccessEvent</a>
+            <a class="nav-link" href="#middleware-verify-signature">paytr.signature Middleware</a>
+            <a class="nav-link" href="#webhook-controller">WebhookController</a>
+            <a class="nav-link" href="#testler-detay">Testler (Detaylı)</a>
+          </nav>
+        </div>
+      </div>
+      <section id="aciklama">
+        <div class="row mb-4">
+          <div class="col-lg-8">
+            <div class="card intro-card border-0 mb-3">
+              <div class="card-body">
+                <h1 class="card-title display-5 mb-2">PayTR Laravel Client</h1>
+                <p class="lead">Laravel projeleri için <span class="badge bg-success">güvenli</span>, <span class="badge bg-primary">modern</span> ve <span class="badge bg-warning text-dark">tam kapsamlı</span> PayTR ödeme entegrasyon paketi.</p>
+                <p class="mb-3">
+                  <b>Neden bu dokümantasyonu kullanmalısınız?</b><br>
+                  <ul class="mb-3">
+                    <li><b>En güncel ve kapsamlı kaynak:</b> Tüm PayTR API fonksiyonları, parametreler, hata yönetimi ve testler tek bir yerde, Türkçe ve örneklerle açıklanmıştır.</li>
+                    <li><b>Gerçek dünya senaryoları:</b> Sadece temel entegrasyon değil, kart saklama, link ile ödeme, platform transferi, webhook doğrulama gibi ileri düzey ihtiyaçlarınız için de detaylı rehberlik sunar.</li>
+                    <li><b>Hızlı çözüm ve entegrasyon:</b> Sık karşılaşılan hatalar, güvenlik ipuçları ve best practice'ler ile entegrasyon sürecinizde zamandan tasarruf edin.</li>
+                    <li><b>Modern ve kullanıcı dostu:</b> Koyu mod, responsive tasarım, kopyalanabilir kod blokları ve kolay menü ile aradığınız bilgiye anında ulaşın.</li>
+                    <li><b>Test ve güvenlik odaklı:</b> Tüm fonksiyonlar için test kapsamı ve hata yönetimi örnekleriyle, canlıya çıkmadan önce güvenle uygulamanızı test edin.</li>
+                    <li><b>Topluluk ve açık kaynak desteği:</b> MIT lisansı ile özgürce kullanın, katkı sağlayın veya kendi projenize entegre edin.</li>
+                  </ul>
+                  <span class="text-info">Bu dokümantasyon, PayTR ile ödeme alan tüm Laravel projelerinde, ister yeni başlıyor olun ister ileri seviye entegrasyonlar yapıyor olun, size rehberlik etmek için tasarlanmıştır.</span>
+                </p>
+                <ul class="list-group list-group-flush mb-3">
+                  <li class="list-group-item border-0 feature-item"><b>✔️ Tüm PayTR API fonksiyonları</b> (ödeme, iade, kart, link, platform, webhook)</li>
+                  <li class="list-group-item border-0 feature-item"><b>🛡️ Gelişmiş güvenlik</b> (HMAC, IP, SSL, signature, .env yönetimi)</li>
+                  <li class="list-group-item border-0 feature-item"><b>⚡ Kolay kurulum & hızlı entegrasyon</b></li>
+                  <li class="list-group-item border-0 feature-item"><b>🧪 %100 test coverage</b> ve örnek testler</li>
+                  <li class="list-group-item border-0 feature-item"><b>🌙 Koyu mod</b> ve <b>responsive</b> dokümantasyon</li>
+                  <li class="list-group-item border-0 feature-item"><b>MIT Lisansı</b> ile tamamen açık kaynak</li>
+                </ul>
+                <div class="alert alert-info mb-0">
+                  <b>📄 Kapsamlı Türkçe dokümantasyon:</b> <br>
+                  <span class="d-block mb-1">Bu sayfa, paketin tüm fonksiyonlarını, parametrelerini, hata yönetimini ve testlerini detaylıca açıklar.</span>
+                  <span class="d-block">Çevrimiçi erişim: <a href="https://tugrulyildirim.com/opensource/paytr-laravel-client" class="link-light" target="_blank">https://tugrulyildirim.com/opensource/paytr-laravel-client</a></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 d-flex align-items-center justify-content-center">
+            <img src="https://tugrulyildirim.com/opensource/paytr-laravel-client/paytr.png" alt="PayTR Logo" class="img-fluid p-3 bg-white rounded shadow" style="max-height:120px;">
+          </div>
+        </div>
+      </section>
+      <section id="kurulum" class="mt-5">
+        <h2>Kurulum</h2>
+        <ol>
+          <li>Composer ile paketi yükleyin:
+            <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-bash">composer require paytr/laravel-client</code></pre></div>
+          </li>
+          <li>Servis sağlayıcı otomatik eklenir. Gerekirse manuel ekleyin:
+            <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// config/app.php
+'providers' => [
+    Paytr\PaytrServiceProvider::class,
+],</code></pre></div>
+          </li>
+          <li>Konfigürasyon dosyasını publish edin:
+            <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-bash">php artisan vendor:publish --tag=paytr-config</code></pre></div>
+          </li>
+        </ol>
+      </section>
+      <section id="kullanim" class="mt-5">
+        <h2>Kullanım</h2>
+        <p>PayTR servislerine facade veya dependency injection ile erişebilirsiniz. Örnekler:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// Facade ile ödeme başlatma
+use Paytr\Facades\Paytr;
+
+$result = Paytr::payment()->pay($payload);
+</code></pre></div>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// Dependency Injection ile
+public function __construct(Paytr\Services\PaymentService $paymentService) {
+    $this->paymentService = $paymentService;
+}
+</code></pre></div>
+      </section>
+      <section id="odeme-yapma" class="mt-5">
+        <h2>Ödeme Yapma (pay)</h2>
+        <p><b>pay(array $payload): array</b> fonksiyonu, PayTR Direct API ile ödeme başlatmanızı sağlar. Tüm zorunlu ve opsiyonel parametreler, dönüş değerleri ve hata yönetimi aşağıda detaylıca açıklanmıştır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden, örn: 10000 = 100 TL).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
+          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi (varsayılan: TL).</li>
+          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı (varsayılan: 0).</li>
+          <li><b>payment_type</b> <i>(string, opsiyonel)</i>: Ödeme tipi (örn: 'card', 'eft').</li>
+          <li><b>lang</b> <i>(string, opsiyonel)</i>: Dil (varsayılan: tr).</li>
+          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'Ödeme tokeni',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: Temel Ödeme Başlatma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'payment_amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'user_ip' => request()->ip(),
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+
+try {
+    $result = Paytr::payment()->pay($payload);
+    // $result['token'] ile ödeme başlatılır
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Örnek: Taksitli Ödeme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload['installment_count'] = 3;
+$result = Paytr::payment()->pay($payload);
+</code></pre></div>
+        <h4>Örnek: Farklı Para Birimi ile Ödeme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload['currency'] = 'USD';
+$result = Paytr::payment()->pay($payload);
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->pay($payload);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Sepet içeriği <b>base64_encode(json_encode(...))</b> ile otomatik olarak kodlanır.</li>
+          <li>Güvenlik için tüm isteklerde imza (signature) zorunludur, kütüphane bunu otomatik olarak üretir.</li>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+        </ul>
+      </section>
+      <section id="iframe-odeme" class="mt-5">
+        <h2>iFrame ile Ödeme (createIframeToken)</h2>
+        <p><b>createIframeToken(array $payload): array</b> fonksiyonu, PayTR iFrame API ile ödeme başlatmak için gerekli token'ı üretir. Bu token ile iFrame ödeme formunu sitenize kolayca entegre edebilirsiniz.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden, örn: 10000 = 100 TL).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
+          <li><b>ok_url</b> <i>(string, zorunlu)</i>: Başarılı ödeme sonrası yönlendirilecek URL.</li>
+          <li><b>fail_url</b> <i>(string, zorunlu)</i>: Başarısız ödeme sonrası yönlendirilecek URL.</li>
+          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi (varsayılan: TL).</li>
+          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı (varsayılan: 0).</li>
+          <li><b>lang</b> <i>(string, opsiyonel)</i>: Dil (varsayılan: tr).</li>
+          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'iFrame token',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: iFrame ile Ödeme Token'ı Alma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'payment_amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'user_ip' => request()->ip(),
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+    'ok_url' => 'https://site.com/success',
+    'fail_url' => 'https://site.com/fail',
+];
+
+try {
+    $result = Paytr::payment()->createIframeToken($payload);
+    // $result['token'] ile iFrame formu oluşturulabilir
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Örnek: iFrame Formunun Entegrasyonu</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-html"><iframe src="https://www.paytr.com/odeme/guvenli/{{ $result['token'] }}" frameborder="0" width="100%" height="600"></iframe>
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->createIframeToken($payload);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>iFrame token'ı yalnızca sunucu tarafında alınmalıdır, güvenlik için istemciye gizli anahtarlar gönderilmemelidir.</li>
+          <li>Sepet içeriği <b>base64_encode(json_encode(...))</b> ile otomatik olarak kodlanır.</li>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+        </ul>
+      </section>
+      <section id="odeme-durumu" class="mt-5">
+        <h2>Ödeme Durumu Sorgulama (getPaymentStatus)</h2>
+        <p><b>getPaymentStatus(string $merchantOid): array</b> fonksiyonu, belirli bir siparişin (merchant_oid) ödeme durumunu PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: Sorgulanacak siparişin benzersiz ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'payment_status' => 'paid', // veya 'pending', 'failed' vb.
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: Ödeme Durumu Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$merchantOid = 'ORDER123';
+
+try {
+    $result = Paytr::payment()->getPaymentStatus($merchantOid);
+    if ($result['payment_status'] === 'paid') {
+        // Ödeme başarılı
+    } elseif ($result['payment_status'] === 'pending') {
+        // Ödeme beklemede
+    } else {
+        // Ödeme başarısız veya iptal
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->getPaymentStatus($merchantOid);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>payment_status alanı 'paid', 'pending', 'failed', 'cancelled' gibi değerler alabilir.</li>
+        </ul>
+      </section>
+      <section id="taksit-oranlari" class="mt-5">
+        <h2>Taksit Oranları Sorgulama (getInstallmentRates)</h2>
+        <p><b>getInstallmentRates(string $bin): array</b> fonksiyonu, verilen kart BIN numarasına göre taksit oranlarını PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>bin</b> <i>(string, zorunlu)</i>: Kartın ilk 6 hanesi (BIN numarası).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'installment_rates' => [
+    ['count' => 1, 'rate' => 0],
+    ['count' => 2, 'rate' => 1.5],
+    // ...
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: Taksit Oranları Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$bin = '454360';
+
+try {
+    $result = Paytr::payment()->getInstallmentRates($bin);
+    foreach ($result['installment_rates'] as $rate) {
+        echo $rate['count'] . ' taksit: ' . $rate['rate'] . "% oran\n";
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->getInstallmentRates($bin);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>installment_rates dizisi, her taksit seçeneği için oranları içerir.</li>
+        </ul>
+      </section>
+      <section id="bin-sorgulama" class="mt-5">
+        <h2>BIN Sorgulama (lookupBin)</h2>
+        <p><b>lookupBin(string $bin): array</b> fonksiyonu, verilen kart BIN numarasına (ilk 6 hane) göre kartın ait olduğu banka, kart tipi ve diğer bilgileri PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>bin</b> <i>(string, zorunlu)</i>: Kartın ilk 6 hanesi (BIN numarası).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'bank' => 'Banka Adı',
+  'card_type' => 'Kredi Kartı',
+  'brand' => 'Visa',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: BIN Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$bin = '454360';
+
+try {
+    $result = Paytr::payment()->lookupBin($bin);
+    echo 'Banka: ' . $result['bank'] . "\n";
+    echo 'Kart Tipi: ' . $result['card_type'] . "\n";
+    echo 'Marka: ' . $result['brand'] . "\n";
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->lookupBin($bin);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>BIN sorgusu ile kartın ait olduğu banka, kart tipi, marka gibi bilgiler alınabilir.</li>
+        </ul>
+      </section>
+      <section id="islem-detayi" class="mt-5">
+        <h2>İşlem Detayı Sorgulama (getTransactionDetail)</h2>
+        <p><b>getTransactionDetail(string $merchantOid): array</b> fonksiyonu, belirli bir siparişin (merchant_oid) işlem detaylarını PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: Sorgulanacak siparişin benzersiz ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'transaction' => [
+    'amount' => 10000,
+    'status' => 'paid',
+    'date' => '2024-01-01 12:00:00',
+    // ... diğer işlem detayları
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: İşlem Detayı Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$merchantOid = 'ORDER123';
+
+try {
+    $result = Paytr::payment()->getTransactionDetail($merchantOid);
+    $transaction = $result['transaction'];
+    echo 'Tutar: ' . $transaction['amount'] . "\n";
+    echo 'Durum: ' . $transaction['status'] . "\n";
+    echo 'Tarih: ' . $transaction['date'] . "\n";
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->getTransactionDetail($merchantOid);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>transaction dizisi, işlemle ilgili tüm detayları içerir.</li>
+        </ul>
+      </section>
+      <section id="odeme-raporu" class="mt-5">
+        <h2>Ödeme Raporu Sorgulama (getPaymentStatement)</h2>
+        <p><b>getPaymentStatement(array $payload): array</b> fonksiyonu, belirli bir tarih aralığı için ödeme raporunu (statement) PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>date_start</b> <i>(string, zorunlu)</i>: Başlangıç tarihi (YYYY-MM-DD).</li>
+          <li><b>date_end</b> <i>(string, zorunlu)</i>: Bitiş tarihi (YYYY-MM-DD).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'payments' => [
+    [
+      'merchant_oid' => 'ORDER123',
+      'amount' => 10000,
+      'status' => 'paid',
+      'date' => '2024-01-01 12:00:00',
+      // ... diğer ödeme detayları
+    ],
+    // ...
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: Ödeme Raporu Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$payload = [
+    'date_start' => '2024-01-01',
+    'date_end' => '2024-01-31',
+];
+
+try {
+    $result = Paytr::payment()->getPaymentStatement($payload);
+    foreach ($result['payments'] as $payment) {
+        echo $payment['merchant_oid'] . ': ' . $payment['amount'] . ' TL - ' . $payment['status'] . "\n";
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->getPaymentStatement($payload);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>payments dizisi, ilgili tarih aralığındaki tüm ödemeleri içerir.</li>
+        </ul>
+      </section>
+      <section id="odeme-detayi" class="mt-5">
+        <h2>Ödeme Detayı Sorgulama (getPaymentDetail)</h2>
+        <p><b>getPaymentDetail(string $paymentId): array</b> fonksiyonu, belirli bir ödeme ID'sine ait detayları PayTR API üzerinden sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>paymentId</b> <i>(string, zorunlu)</i>: Sorgulanacak ödemenin benzersiz ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'payment' => [
+    'merchant_oid' => 'ORDER123',
+    'amount' => 10000,
+    'status' => 'paid',
+    'date' => '2024-01-01 12:00:00',
+    // ... diğer ödeme detayları
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <p>Başarısız işlemde <b>PaytrException</b> fırlatılır ve hata mesajı döner.</p>
+        <h4>Örnek: Ödeme Detayı Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$paymentId = '12345';
+
+try {
+    $result = Paytr::payment()->getPaymentDetail($paymentId);
+    $payment = $result['payment'];
+    echo 'Sipariş: ' . $payment['merchant_oid'] . "\n";
+    echo 'Tutar: ' . $payment['amount'] . "\n";
+    echo 'Durum: ' . $payment['status'] . "\n";
+    echo 'Tarih: ' . $payment['date'] . "\n";
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+        <h4>Hata Yönetimi</h4>
+        <p>API veya validasyon hatalarında <b>PaytrException</b> fırlatılır. Hata mesajı ve kodu exception üzerinden alınabilir.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">try {
+    $result = Paytr::payment()->getPaymentDetail($paymentId);
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata mesajı: $e->getMessage()
+    // Hata kodu: $e->getCode()
+}
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Yanıtta <b>status</b> alanı 'success' değilse, hata olarak değerlendirilir.</li>
+          <li>payment dizisi, ödeme ile ilgili tüm detayları içerir.</li>
+        </ul>
+      </section>
+      <section id="on-provizyon" class="mt-5">
+        <h2>Ön Provizyon (preProvision)</h2>
+        <p><b>preProvision(array $payload): array</b> fonksiyonu, ön provizyon (pre-auth) işlemi başlatmak için kullanılır. Karttan tutar çekilmeden önce provizyon alınmasını sağlar.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Provizyon tutarı (Kuruş cinsinden).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği.</li>
+          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'Provizyon tokeni',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Ön Provizyon Başlatma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'payment_amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'user_ip' => request()->ip(),
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+$result = Paytr::payment()->preProvision($payload);
+</code></pre></div>
+      </section>
+      <section id="eft-iframe" class="mt-5">
+        <h2>EFT iFrame (createEftIframe)</h2>
+        <p><b>createEftIframe(array $payload): array</b> fonksiyonu, EFT ile ödeme için iFrame token'ı oluşturur.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği.</li>
+          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'EFT iFrame token',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: EFT iFrame Token Alma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'payment_amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'user_ip' => request()->ip(),
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+$result = Paytr::payment()->createEftIframe($payload);
+</code></pre></div>
+      </section>
+      <section id="bkm-express" class="mt-5">
+        <h2>BKM Express ile Ödeme (payWithBkmExpress)</h2>
+        <p><b>payWithBkmExpress(array $payload): array</b> fonksiyonu, BKM Express ile ödeme başlatmak için kullanılır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği.</li>
+          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'BKM Express token',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: BKM Express ile Ödeme Başlatma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'payment_amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'user_ip' => request()->ip(),
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+$result = Paytr::payment()->payWithBkmExpress($payload);
+</code></pre></div>
+      </section>
+      <section id="sepet-kodlama" class="mt-5">
+        <h2>Sepet Kodlama (encodeBasket)</h2>
+        <p><b>encodeBasket(array $basket): string</b> fonksiyonu, ödeme işlemlerinde kullanılacak sepet dizisini PayTR API'nin beklediği şekilde base64 ile kodlar.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$encoded = Paytr::payment()->encodeBasket($basket);
+// $encoded: base64 kodlu sepet
+</code></pre></div>
+        <h4>Örnek: Sepet Kodlama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$basket = [
+    ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ['name' => 'Diğer Ürün', 'price' => 5000, 'quantity' => 2],
+];
+$encoded = Paytr::payment()->encodeBasket($basket);
+</code></pre></div>
+      </section>
+      <section id="iade" class="mt-5">
+        <h2>İade (refund)</h2>
+        <p><b>refund(string $merchantOid): array</b> fonksiyonu, bir ödemenin tamamının iadesini başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: İadesi yapılacak siparişin benzersiz ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Tam İade</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$merchantOid = 'ORDER123';
+
+try {
+    $result = Paytr::refund()->refund($merchantOid);
+    // İade başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kismi-iade" class="mt-5">
+        <h2>Kısmi İade (partialRefund)</h2>
+        <p><b>partialRefund(string $merchantOid, int $amount): array</b> fonksiyonu, bir ödemenin belirli bir tutarının iadesini başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: İadesi yapılacak siparişin benzersiz ID'si.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: İade edilecek tutar (Kuruş cinsinden).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kısmi İade</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$merchantOid = 'ORDER123';
+$amount = 5000; // 50 TL
+
+try {
+    $result = Paytr::refund()->partialRefund($merchantOid, $amount);
+    // Kısmi iade başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="iade-durumu" class="mt-5">
+        <h2>İade Durumu Sorgulama (getRefundStatus)</h2>
+        <p><b>getRefundStatus(string $merchantOid): array</b> fonksiyonu, bir iade işleminin güncel durumunu sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: Sorgulanacak iade işleminin sipariş ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'refund_status' => 'completed', // veya 'pending', 'failed' vb.
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: İade Durumu Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$merchantOid = 'ORDER123';
+
+try {
+    $result = Paytr::refund()->getRefundStatus($merchantOid);
+    if ($result['refund_status'] === 'completed') {
+        // İade tamamlandı
+    } elseif ($result['refund_status'] === 'pending') {
+        // İade beklemede
+    } else {
+        // İade başarısız veya iptal
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="iptal" class="mt-5">
+        <h2>İptal (cancel)</h2>
+        <p><b>cancel(string $merchantOid): array</b> fonksiyonu, bir ödemenin tamamının iptalini başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: İptal edilecek siparişin benzersiz ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Tam İptal</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+
+$merchantOid = 'ORDER123';
+
+try {
+    $result = Paytr::cancel()->cancel($merchantOid);
+    // İptal başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kismi-iptal" class="mt-5">
+        <h2>Kısmi İptal (partialCancel)</h2>
+        <p><b>partialCancel(string $merchantOid, int $amount): array</b> fonksiyonu, bir ödemenin belirli bir tutarının iptalini başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>merchantOid</b> <i>(string, zorunlu)</i>: İptal edilecek siparişin benzersiz ID'si.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: İptal edilecek tutar (Kuruş cinsinden).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kısmi İptal</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$merchantOid = 'ORDER123';
+$amount = 5000; // 50 TL
+
+try {
+    $result = Paytr::cancel()->partialCancel($merchantOid, $amount);
+    // Kısmi iptal başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    // Hata yönetimi
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kart-kaydet" class="mt-5">
+        <h2>Kart Kaydet (storeCard)</h2>
+        <p><b>storeCard(array $cardData): array</b> fonksiyonu, kullanıcının kart bilgisini güvenli şekilde PayTR sistemine kaydeder.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>customer_id</b> <i>(string, zorunlu)</i>: Kullanıcıya özel ID.</li>
+          <li><b>cc_owner</b> <i>(string, zorunlu)</i>: Kart sahibi adı.</li>
+          <li><b>card_number</b> <i>(string, zorunlu)</i>: Kart numarası.</li>
+          <li><b>expiry_month</b> <i>(string, zorunlu)</i>: Son kullanma ayı (MM).</li>
+          <li><b>expiry_year</b> <i>(string, zorunlu)</i>: Son kullanma yılı (YY).</li>
+          <li><b>cvv</b> <i>(string, zorunlu)</i>: Kart güvenlik kodu.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'token' => 'Kart tokeni',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kart Kaydetme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$cardData = [
+    'customer_id' => 'USER123',
+    'cc_owner' => 'Test Kullanıcı',
+    'card_number' => '4111111111111111',
+    'expiry_month' => '12',
+    'expiry_year' => '25',
+    'cvv' => '123',
+];
+
+try {
+    $result = Paytr::card()->storeCard($cardData);
+    // $result['token'] ile kayıtlı kart işlemleri yapılabilir
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kart-ile-odeme" class="mt-5">
+        <h2>Kart ile Ödeme (payWithCard)</h2>
+        <p><b>payWithCard(string $token, array $paymentData): array</b> fonksiyonu, kayıtlı kart ile ödeme başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>token</b> <i>(string, zorunlu)</i>: Kayıtlı kart tokeni.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden).</li>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Sipariş ID'si.</li>
+          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi.</li>
+          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kayıtlı Kart ile Ödeme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$token = 'KART_TOKEN';
+$paymentData = [
+    'amount' => 10000,
+    'merchant_oid' => 'ORDER123',
+];
+
+try {
+    $result = Paytr::card()->payWithCard($token, $paymentData);
+    // Ödeme başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="tekrarlayan-odeme" class="mt-5">
+        <h2>Tekrarlayan Ödeme (recurringPayment)</h2>
+        <p><b>recurringPayment(string $token, array $paymentData): array</b> fonksiyonu, kayıtlı kart ile tekrarlayan ödeme başlatır.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>token</b> <i>(string, zorunlu)</i>: Kayıtlı kart tokeni.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden).</li>
+          <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Sipariş ID'si.</li>
+          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi.</li>
+          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Tekrarlayan Ödeme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$token = 'KART_TOKEN';
+$paymentData = [
+    'amount' => 10000,
+    'merchant_oid' => 'ORDER123',
+];
+
+try {
+    $result = Paytr::card()->recurringPayment($token, $paymentData);
+    // Ödeme başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kartlari-listele" class="mt-5">
+        <h2>Kartları Listele (listCards)</h2>
+        <p><b>listCards(string $customerId): array</b> fonksiyonu, bir kullanıcıya ait kayıtlı kartları listeler.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>customerId</b> <i>(string, zorunlu)</i>: Kullanıcıya özel ID.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'cards' => [
+    [
+      'token' => 'KART_TOKEN',
+      'cc_owner' => 'Test Kullanıcı',
+      // ... diğer kart bilgileri
+    ],
+    // ...
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kartları Listeleme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$customerId = 'USER123';
+
+try {
+    $result = Paytr::card()->listCards($customerId);
+    foreach ($result['cards'] as $card) {
+        echo $card['cc_owner'] . ' - ' . $card['token'] . "\n";
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="kart-sil" class="mt-5">
+        <h2>Kart Sil (deleteCard)</h2>
+        <p><b>deleteCard(string $token): array</b> fonksiyonu, kayıtlı bir kartı siler.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>token</b> <i>(string, zorunlu)</i>: Silinecek kartın tokeni.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Kart Silme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$token = 'KART_TOKEN';
+
+try {
+    $result = Paytr::card()->deleteCard($token);
+    // Silme başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="link-olustur" class="mt-5">
+        <h2>Link ile Ödeme Oluştur (createLink)</h2>
+        <p><b>createLink(array $payload): array</b> fonksiyonu, kullanıcıya özel ödeme linki oluşturur.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden).</li>
+          <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
+          <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
+          <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği.</li>
+          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi.</li>
+          <li><b>lang</b> <i>(string, opsiyonel)</i>: Dil.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'link' => 'https://paytr.com/odeme/....',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Link ile Ödeme Oluşturma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'email' => 'user@example.com',
+    'amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+
+try {
+    $result = Paytr::link()->createLink($payload);
+    // $result['link'] ile kullanıcıya ödeme linki gönderilebilir
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="link-sil" class="mt-5">
+        <h2>Link Sil (deleteLink)</h2>
+        <p><b>deleteLink(string $linkId): array</b> fonksiyonu, oluşturulan ödeme linkini siler.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>linkId</b> <i>(string, zorunlu)</i>: Silinecek linkin ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Link Silme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$linkId = 'LINK_ID';
+
+try {
+    $result = Paytr::link()->deleteLink($linkId);
+    // Silme başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="link-callback" class="mt-5">
+        <h2>Link Callback Doğrulama (verifyCallback)</h2>
+        <p><b>verifyCallback(array $payload, string $signature): bool</b> fonksiyonu, ödeme linki callback isteğinin imzasını doğrular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>payload</b> <i>(array, zorunlu)</i>: Callback ile gelen veri.</li>
+          <li><b>signature</b> <i>(string, zorunlu)</i>: Callback isteği ile gelen imza.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$isValid = Paytr::link()->verifyCallback($payload, $signature);
+// $isValid: true veya false
+</code></pre></div>
+        <h4>Örnek: Callback Doğrulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [...];
+$signature = $_SERVER['HTTP_X_PAYTR_SIGNATURE'] ?? '';
+
+$isValid = Paytr::link()->verifyCallback($payload, $signature);
+if ($isValid) {
+    // Callback geçerli
+} else {
+    // Geçersiz imza
+}
+</code></pre></div>
+      </section>
+      <section id="link-bildirim" class="mt-5">
+        <h2>Link Bildirim Gönder (sendLinkNotification)</h2>
+        <p><b>sendLinkNotification(string $linkId, string $type = 'sms'): array</b> fonksiyonu, oluşturulan ödeme linki için SMS veya e-posta bildirimi gönderir.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>linkId</b> <i>(string, zorunlu)</i>: Bildirim gönderilecek linkin ID'si.</li>
+          <li><b>type</b> <i>(string, opsiyonel)</i>: Bildirim tipi ('sms' veya 'email').</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Link Bildirim Gönderme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$linkId = 'LINK_ID';
+
+try {
+    $result = Paytr::link()->sendLinkNotification($linkId, 'sms');
+    // Bildirim başarılı ise $result['status'] == 'success'
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="servisler" class="mt-5">
+        <h2>Servisler</h2>
+        <p>Kütüphane aşağıdaki ana servisleri sunar:</p>
+        <ul>
+          <li><b>Ödeme Servisi (PaymentService):</b> Direct API, iFrame API, ödeme durumu, taksit oranı, BIN sorgulama, işlem detayı.</li>
+          <li><b>İade Servisi (RefundService):</b> Tam/kısmi iade ve iade durumu sorgulama.</li>
+          <li><b>İptal Servisi (CancelService):</b> Tam/kısmi iptal işlemleri.</li>
+          <li><b>Kart Servisi (CardService):</b> Kart saklama, kayıtlı kartla ödeme, kart listeleme/silme.</li>
+          <li><b>Link Servisi (LinkService):</b> Link ile ödeme oluşturma, silme, bildirim gönderme.</li>
+          <li><b>Platform Servisi (PlatformService):</b> Platform transferi, iade, callback doğrulama.</li>
+        </ul>
+        <h4 class="mt-4">Örnek: iFrame ile ödeme başlatma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'merchant_oid' => 'ORDER123',
+    'email' => 'user@example.com',
+    'amount' => 10000,
+    'user_name' => 'Test Kullanıcı',
+    'user_address' => 'Adres',
+    'user_phone' => '5551234567',
+    'ok_url' => 'https://site.com/success',
+    'fail_url' => 'https://site.com/fail',
+    'basket' => [
+        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+    ],
+];
+$result = Paytr::payment()->createIframeToken($payload);
+</code></pre></div>
+        <h4 class="mt-4">Örnek: İade işlemi</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$result = Paytr::refund()->refund('ORDER123');
+</code></pre></div>
+      </section>
+      <section id="eventler" class="mt-5">
+        <h2>Eventler</h2>
+        <ul>
+          <li><b>PaymentSuccessEvent:</b> Başarılı ödeme sonrası tetiklenir.</li>
+          <li><b>PaymentFailedEvent:</b> Başarısız ödeme sonrası tetiklenir.</li>
+          <li><b>RefundSuccessEvent:</b> Başarılı iade sonrası tetiklenir.</li>
+        </ul>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// Event dinleme örneği
+Event::listen(Paytr\Events\PaymentSuccessEvent::class, function($event) {
+    // $event->data ile işlem detaylarına erişebilirsiniz
+});
+</code></pre></div>
+      </section>
+      <section id="middleware" class="mt-5">
+        <h2>Middleware</h2>
+        <p><b>paytr.signature</b> middleware'i, webhook endpoint'lerinde imza doğrulaması yapar.</p>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Route::post('/webhook', [WebhookController::class, 'handle'])
+    ->middleware('paytr.signature');
+</code></pre></div>
+      </section>
+      <section id="testler" class="mt-5">
+        <h2>Testler</h2>
+        <p>Kütüphane, unit ve feature testleriyle kapsamlı şekilde test edilmiştir. Testler, eventlerin veri taşıma işlevinden, servislerin imza üretimine ve middleware doğrulamasına kadar tüm kritik noktaları kapsar.</p>
+        <ul>
+          <li><b>PaytrEventsTest:</b> Eventlerin veri taşıma işlevi test edilir.</li>
+          <li><b>WebhookSecretTest:</b> Webhook secret eksikse istek reddedilir.</li>
+          <li><b>VerifyPaytrSignatureTest:</b> Middleware imza doğrulaması test edilir.</li>
+          <li><b>WebhookAllowedIpTest:</b> IP kısıtlaması test edilir.</li>
+          <li><b>ServicePayloadTest & PayloadStructureTest:</b> Servislerin imza ve payload yapısı test edilir.</li>
+          <li><b>PaymentTest:</b> Temel ödeme, iade, kart ve iptal işlemleri test edilir.</li>
+        </ul>
+      </section>
+      <section id="platform-transfer" class="mt-5">
+        <h2>Platform Transfer Oluştur (createTransfer)</h2>
+        <p><b>createTransfer(array $payload): array</b> fonksiyonu, platform üzerinden transfer talebi oluşturur.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: Transfer edilecek tutar (Kuruş cinsinden).</li>
+          <li><b>iban</b> <i>(string, zorunlu)</i>: Alıcı IBAN numarası.</li>
+          <li><b>description</b> <i>(string, opsiyonel)</i>: Açıklama.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'transfer_id' => 'TRF123',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Platform Transfer Oluşturma</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'amount' => 10000,
+    'iban' => 'TR000000000000000000000000',
+    'description' => 'Açıklama',
+];
+
+try {
+    $result = Paytr::platform()->createTransfer($payload);
+    // $result['transfer_id'] ile transfer işlemi takip edilebilir
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="platform-sonuc" class="mt-5">
+        <h2>Platform Transfer Sonucu (getTransferResult)</h2>
+        <p><b>getTransferResult(string $transferId): array</b> fonksiyonu, platform transferinin sonucunu sorgular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>transferId</b> <i>(string, zorunlu)</i>: Sorgulanacak transferin ID'si.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'result' => 'completed', // veya 'pending', 'failed' vb.
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Platform Transfer Sonucu Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$transferId = 'TRF123';
+
+try {
+    $result = Paytr::platform()->getTransferResult($transferId);
+    if ($result['result'] === 'completed') {
+        // Transfer tamamlandı
+    } elseif ($result['result'] === 'pending') {
+        // Transfer beklemede
+    } else {
+        // Transfer başarısız
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="platform-iadeler" class="mt-5">
+        <h2>Platform İade Listesi (getReturningPayments)</h2>
+        <p><b>getReturningPayments(array $payload): array</b> fonksiyonu, belirli bir tarih aralığında iade edilen ödemeleri listeler.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>date_start</b> <i>(string, zorunlu)</i>: Başlangıç tarihi (YYYY-MM-DD).</li>
+          <li><b>date_end</b> <i>(string, zorunlu)</i>: Bitiş tarihi (YYYY-MM-DD).</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  'returning_payments' => [
+    [
+      'trans_id' => 'TRS123',
+      'amount' => 10000,
+      'iban' => 'TR000000000000000000000000',
+      // ... diğer bilgiler
+    ],
+    // ...
+  ],
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Platform İade Listesi Sorgulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'date_start' => '2024-01-01',
+    'date_end' => '2024-01-31',
+];
+
+try {
+    $result = Paytr::platform()->getReturningPayments($payload);
+    foreach ($result['returning_payments'] as $payment) {
+        echo $payment['trans_id'] . ': ' . $payment['amount'] . "\n";
+    }
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="platform-iade-gonder" class="mt-5">
+        <h2>Platform İade Gönder (sendReturningPayment)</h2>
+        <p><b>sendReturningPayment(array $payload): array</b> fonksiyonu, hesaptan iade ödemesi gönderir.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>trans_id</b> <i>(string, zorunlu)</i>: İade edilecek işlemin ID'si.</li>
+          <li><b>amount</b> <i>(int, zorunlu)</i>: İade edilecek tutar (Kuruş cinsinden).</li>
+          <li><b>iban</b> <i>(string, zorunlu)</i>: Alıcı IBAN numarası.</li>
+          <li><b>name</b> <i>(string, zorunlu)</i>: Alıcı adı.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">[
+  'status' => 'success',
+  // Diğer PayTR yanıt parametreleri
+]</code></pre></div>
+        <h4>Örnek: Platform İade Gönderme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [
+    'trans_id' => 'TRS123',
+    'amount' => 10000,
+    'iban' => 'TR000000000000000000000000',
+    'name' => 'Alıcı Adı',
+];
+
+try {
+    $result = Paytr::platform()->sendReturningPayment($payload);
+    // $result['status'] == 'success' ise iade gönderildi
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="platform-callback" class="mt-5">
+        <h2>Platform Callback İşle (handleReturningCallback)</h2>
+        <p><b>handleReturningCallback(array $payload): array</b> fonksiyonu, gelen iade bildirimini işler ve doğrular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>payload</b> <i>(array, zorunlu)</i>: Callback ile gelen veri.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$result = Paytr::platform()->handleReturningCallback($payload);
+// $result: iade edilen işlemler dizisi
+</code></pre></div>
+        <h4>Örnek: Callback İşleme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [...];
+
+try {
+    $result = Paytr::platform()->handleReturningCallback($payload);
+    // $result ile iade edilen işlemler işlenebilir
+} catch (Paytr\Exceptions\PaytrException $e) {
+    echo $e->getMessage();
+}
+</code></pre></div>
+      </section>
+      <section id="platform-callback-dogrula" class="mt-5">
+        <h2>Platform Callback Doğrulama (verifyCallback)</h2>
+        <p><b>verifyCallback(array $payload, string $signature): bool</b> fonksiyonu, platform transfer callback isteğinin imzasını doğrular.</p>
+        <h4>Parametreler</h4>
+        <ul>
+          <li><b>payload</b> <i>(array, zorunlu)</i>: Callback ile gelen veri.</li>
+          <li><b>signature</b> <i>(string, zorunlu)</i>: Callback isteği ile gelen imza.</li>
+        </ul>
+        <h4>Dönüş Değeri</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$isValid = Paytr::platform()->verifyCallback($payload, $signature);
+// $isValid: true veya false
+</code></pre></div>
+        <h4>Örnek: Callback Doğrulama</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$payload = [...];
+$signature = $_SERVER['HTTP_X_PAYTR_SIGNATURE'] ?? '';
+
+$isValid = Paytr::platform()->verifyCallback($payload, $signature);
+if ($isValid) {
+    // Callback geçerli
+} else {
+    // Geçersiz imza
+}
+</code></pre></div>
+      </section>
+      <section id="event-payment-success" class="mt-5">
+        <h2>PaymentSuccessEvent</h2>
+        <p>Başarılı bir ödeme işlemi gerçekleştiğinde tetiklenen eventtir.</p>
+        <h4>Tetiklenme Durumu</h4>
+        <ul><li>Ödeme başarılı olduğunda otomatik olarak tetiklenir (webhook veya servis üzerinden).</li></ul>
+        <h4>Veri Yapısı</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$event->data = [
+  'event' => 'payment_success',
+  'merchant_oid' => 'ORDER123',
+  'amount' => 10000,
+  // ... diğer alanlar
+];
+</code></pre></div>
+        <h4>Örnek: Event Dinleme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Event::listen(Paytr\Events\PaymentSuccessEvent::class, function($event) {
+    // $event->data ile işlem detaylarına erişebilirsiniz
+});
+</code></pre></div>
+      </section>
+      <section id="event-payment-failed" class="mt-5">
+        <h2>PaymentFailedEvent</h2>
+        <p>Başarısız bir ödeme işlemi gerçekleştiğinde tetiklenen eventtir.</p>
+        <h4>Tetiklenme Durumu</h4>
+        <ul><li>Ödeme başarısız olduğunda otomatik olarak tetiklenir (webhook veya servis üzerinden).</li></ul>
+        <h4>Veri Yapısı</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$event->data = [
+  'event' => 'payment_failed',
+  'merchant_oid' => 'ORDER123',
+  'reason' => 'Insufficient funds',
+  // ... diğer alanlar
+];
+</code></pre></div>
+        <h4>Örnek: Event Dinleme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Event::listen(Paytr\Events\PaymentFailedEvent::class, function($event) {
+    // $event->data ile hata detaylarına erişebilirsiniz
+});
+</code></pre></div>
+      </section>
+      <section id="event-refund-success" class="mt-5">
+        <h2>RefundSuccessEvent</h2>
+        <p>Başarılı bir iade işlemi gerçekleştiğinde tetiklenen eventtir.</p>
+        <h4>Tetiklenme Durumu</h4>
+        <ul><li>İade başarılı olduğunda otomatik olarak tetiklenir (webhook veya servis üzerinden).</li></ul>
+        <h4>Veri Yapısı</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$event->data = [
+  'event' => 'refund_success',
+  'merchant_oid' => 'ORDER123',
+  'refund_amount' => 5000,
+  // ... diğer alanlar
+];
+</code></pre></div>
+        <h4>Örnek: Event Dinleme</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Event::listen(Paytr\Events\RefundSuccessEvent::class, function($event) {
+    // $event->data ile iade detaylarına erişebilirsiniz
+});
+</code></pre></div>
+      </section>
+      <section id="middleware-verify-signature" class="mt-5">
+        <h2>paytr.signature Middleware</h2>
+        <p>Webhook endpoint'lerinde gelen isteğin imzasını doğrulayan middleware'dir.</p>
+        <h4>Kullanım</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Route::post('/webhook', [WebhookController::class, 'handle'])
+    ->middleware('paytr.signature');
+</code></pre></div>
+        <h4>Çalışma Prensibi</h4>
+        <ul>
+          <li>İstekten gelen <b>X-PayTR-Signature</b> header'ı ve payload, config'deki <b>webhook_secret</b> ile doğrulanır.</li>
+          <li>Doğrulama başarısızsa 403, secret eksikse 500 döner.</li>
+        </ul>
+        <h4>Örnek: Hatalı İmza</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-bash">curl -X POST /webhook -H "X-PayTR-Signature: yanlis" -d '{...}'</code></pre></div>
+      </section>
+      <section id="webhook-controller" class="mt-5">
+        <h2>WebhookController</h2>
+        <p>PayTR tarafından gönderilen webhook bildirimlerini işler. IP ve signature doğrulaması yapar, ilgili event'i tetikler.</p>
+        <h4>Örnek Route</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Route::post('/webhook', [WebhookController::class, 'handle'])
+    ->middleware('paytr.signature');
+</code></pre></div>
+        <h4>Çalışma Prensibi</h4>
+        <ul>
+          <li>IP kısıtlaması ve signature doğrulaması yapılır.</li>
+          <li>Payload JSON parse edilir, event türüne göre ilgili event tetiklenir.</li>
+          <li>Hatalı veya yetkisiz istekler loglanır ve uygun HTTP kodları ile yanıtlanır.</li>
+        </ul>
+        <h4>Örnek: Webhook Payload</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-json">{
+  "event": "payment_success",
+  "merchant_oid": "ORDER123",
+  "amount": 10000,
+  // ... diğer alanlar
+}
+</code></pre></div>
+      </section>
+      <section id="testler-detay" class="mt-5">
+        <h2>Testler (Detaylı)</h2>
+        <p>Kütüphane, unit ve feature testleriyle kapsamlı şekilde test edilmiştir. Her bir testin amacı, kapsamı ve örnek assertion'lar aşağıda özetlenmiştir.</p>
+        <ul>
+          <li><b>PaytrEventsTest:</b> Eventlerin veri taşıma işlevi test edilir.</li>
+          <li><b>WebhookSecretTest:</b> Webhook secret eksikse istek reddedilir.</li>
+          <li><b>VerifyPaytrSignatureTest:</b> Middleware imza doğrulaması test edilir.</li>
+          <li><b>WebhookAllowedIpTest:</b> IP kısıtlaması test edilir.</li>
+          <li><b>ServicePayloadTest & PayloadStructureTest:</b> Servislerin imza ve payload yapısı test edilir.</li>
+          <li><b>PaymentTest:</b> Temel ödeme, iade, kart ve iptal işlemleri test edilir.</li>
+        </ul>
+        <h4>Örnek: Test Assertion</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">$this->assertEquals($data, $event->data);
+$response->assertStatus(500);
+$this->assertArrayHasKey('paytr_token', $params);
+</code></pre></div>
+      </section>
+    </div>
+    <footer id="kahve-ismarla" class="py-5 mt-5" style="background: var(--bs-body-bg); color: var(--bs-body-color);">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-8">
+            <div class="card bg-gradient bg-dark border-0 shadow-lg mb-3">
+              <div class="card-body">
+                <h3 class="card-title mb-3">Kahve Ismarla ☕</h3>
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <div class="card bg-dark text-light border border-warning mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">USDT <span class="badge bg-warning text-dark">TRC20</span></h5>
+                        <p class="card-text small">TBHnsU7hNsJSoFwRhjAChnEUfVk4Ypjwot</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-dark text-light border border-warning mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">BTC <span class="badge bg-warning text-dark">BEP20</span></h5>
+                        <p class="card-text small">0x5dcd4d1cb5194b312f10745ab4462acda3df54c7</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-dark text-light border border-warning mb-2">
+                      <div class="card-body">
+                        <h5 class="card-title">ETH <span class="badge bg-warning text-dark">BEP20</span></h5>
+                        <p class="card-text small">0x5dcd4d1cb5194b312f10745ab4462acda3df54c7</p>
+                        <p class="card-text small text-muted mb-0">BNB Smart Chain (BSC) ağı</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="alert alert-secondary">
+                  <b>Banka hesabına transfer yapmak isteyenler için:</b><br>
+                  <a href="https://tugrulyildirim.com/opensource/paytr-laravel-client#kahve-ismarla" target="_blank" class="fw-bold">@https://tugrulyildirim.com/opensource/paytr-laravel-client#kahve-ismarla</a> adresindeki formu doldurursanız, IBAN bilgileri e-posta adresinize otomatik olarak gönderilecektir.<br>
+                  <span class="text-warning">IBAN bilgileri burada halka açık olarak paylaşılmaz, sadece web sitesindeki formu dolduranlara iletilir.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <script>
+      // Kopyalama butonu
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const code = this.nextElementSibling.querySelector('code').innerText;
+          navigator.clipboard.writeText(code);
+          this.innerText = 'Kopyalandı!';
+          setTimeout(() => this.innerText = 'kopyala', 1200);
+        });
+      });
+      // Menüden kaydırma
+      document.querySelectorAll('.sidebar .nav-link, #mobileMenu .nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if(target) {
+            e.preventDefault();
+            window.scrollTo({ top: target.offsetTop - 20, behavior: 'smooth' });
+            document.querySelectorAll('.sidebar .nav-link').forEach(l => l.classList.remove('active'));
+            this.classList.add('active');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
