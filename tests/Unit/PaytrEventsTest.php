@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit;
+namespace Paytr\Tests\Unit;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Paytr\Events\PaymentSuccessEvent;
@@ -16,9 +16,9 @@ class PaytrEventsTest extends BaseTestCase
             'merchant_oid' => 'TEST123',
             'amount' => 100
         ];
-        
+
         $event = new PaymentSuccessEvent($data);
-        
+
         $this->assertEquals($data, $event->data);
     }
 
@@ -29,9 +29,9 @@ class PaytrEventsTest extends BaseTestCase
             'merchant_oid' => 'TEST456',
             'reason' => 'Insufficient funds'
         ];
-        
+
         $event = new PaymentFailedEvent($data);
-        
+
         $this->assertEquals($data, $event->data);
     }
 
@@ -42,9 +42,9 @@ class PaytrEventsTest extends BaseTestCase
             'merchant_oid' => 'TEST789',
             'refund_amount' => 50
         ];
-        
+
         $event = new RefundSuccessEvent($data);
-        
+
         $this->assertEquals($data, $event->data);
     }
 }

@@ -57,6 +57,7 @@ PAYTR_ALLOWED_IPS=192.168.1.1,192.168.1.2
 PAYTR_TIMEOUT=30
 PAYTR_DEFAULT_TIMEOUT=0
 PAYTR_VERIFY_SSL=true
+PAYTR_DIRECT_API_URL=https://www.paytr.com/odeme
 ```
 
 
@@ -317,7 +318,7 @@ Paytr::card()->recurringPayment($cardToken, [
 ## 🧪 Test
 
 ```bash
-php artisan test --filter=Paytr
+./vendor/bin/phpunit
 ```
 
 ## 📚 API Dokümantasyonu
