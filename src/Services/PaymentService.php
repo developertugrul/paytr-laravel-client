@@ -47,6 +47,17 @@ class PaymentService
             Log::info('PayTR Hash String: ' . $data['hash_str']);
             Log::info('PayTR Merchant Key: ' . $config['merchant_key']);
             Log::info('PayTR Merchant Salt: ' . $config['merchant_salt']);
+            Log::info('PayTR Merchant ID: ' . $data['merchant_id']);
+            Log::info('PayTR User IP: ' . $data['user_ip']);
+            Log::info('PayTR Merchant OID: ' . $data['merchant_oid']);
+            Log::info('PayTR Email: ' . $data['email']);
+            Log::info('PayTR Payment Amount: ' . $data['payment_amount']);
+            Log::info('PayTR User Basket: ' . $data['user_basket']);
+            Log::info('PayTR Payment Type: ' . $data['payment_type']);
+            Log::info('PayTR Installment Count: ' . $data['installment_count']);
+            Log::info('PayTR Currency: ' . $data['currency']);
+            Log::info('PayTR Test Mode: ' . $data['test_mode']);
+            Log::info('PayTR Non 3D: ' . $data['non_3d']);
         }
 
         $signature = HashHelper::makeSignature($data['hash_str'], $config['merchant_key'], $config['merchant_salt']);
