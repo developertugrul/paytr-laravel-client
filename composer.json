@@ -1,7 +1,7 @@
 {
     "name": "developertugrul/paytr-laravel-client",
     "description": "Laravel i\u00e7in g\u00fcncel, g\u00fcvenli ve kapsaml\u0131 PayTR \u00f6deme entegrasyon paketi. G\u00fcncel PayTR API dok\u00fcmantasyonuna tam uyumlu.",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "type": "library",
     "license": "MIT",
     "keywords": [
