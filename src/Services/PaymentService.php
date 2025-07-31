@@ -50,7 +50,7 @@ class PaymentService
         }
 
         $signature = HashHelper::makeSignature($data['hash_str'], $config['merchant_key'], $config['merchant_salt']);
-        $data['paytr_token'] = $signature;
+        $data['token'] = $signature; // Direct API'de 'token' kullanılır
         unset($data['hash_str']);
 
         try {
