@@ -92,7 +92,12 @@ class VersionUpdater
         exec("git commit -m \"Bump version to {$version}\"");
         exec("git tag -a v{$version} -m \"Version {$version}\"");
 
+        // Tag'i push et
+        exec("git push origin v{$version}");
+        exec("git push origin main");
+
         echo "📝 Git commit ve tag oluşturuldu\n";
+        echo "🚀 Tag GitHub'a push edildi: v{$version}\n";
     }
 
     public function showCurrentVersion()

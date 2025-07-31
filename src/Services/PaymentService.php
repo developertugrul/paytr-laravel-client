@@ -1,4 +1,5 @@
 <?php
+
 namespace Paytr\Services;
 
 use Paytr\Helpers\HashHelper;
@@ -330,11 +331,11 @@ class PaymentService
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
-            'merchant_ok_url'=> $payload['ok_url'],
-            'merchant_fail_url'=> $payload['fail_url'],
+            'merchant_ok_url' => $payload['ok_url'],
+            'merchant_fail_url' => $payload['fail_url'],
             'user_basket'    => $this->encodeBasket($payload['basket']),
             'no_installment' => $payload['no_installment'] ?? 0,
-            'max_installment'=> $payload['max_installment'] ?? 0,
+            'max_installment' => $payload['max_installment'] ?? 0,
             'lang'           => $payload['lang'] ?? $config['default_lang'],
             'payment_type'   => $payload['payment_type'] ?? 'card',
             'cc_owner'       => $payload['cc_owner'] ?? '',
@@ -344,12 +345,33 @@ class PaymentService
             'cvv'            => $payload['cvv'] ?? '',
             'installment_count' => $payload['installment_count'] ?? 0,
             'non_3d'         => $payload['non_3d'] ?? 0,
+            'test_mode'      => $config['sandbox'] ? 1 : 0,
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
         // Direct API için hash string - PayTR dokümantasyonuna göre
         // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
-        $hash_str = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['no_installment'] . $data['max_installment'] . $data['currency'] . $data['lang'];
+        $hash_str =
+            $data['merchant_id'] .
+            $data['user_ip'] .
+            $data['merchant_oid'] .
+            $data['email'] .
+            $data['payment_amount'] .
+            $data['payment_type'] .
+            $data['installment_count'] .
+            $data['currency'] .
+            $data['test_mode'] .
+            $data['non_3d'] .
+            $data['merchant_ok_url'] .
+            $data['merchant_fail_url'] .
+            $data['user_name'] .
+            $data['user_address'] .
+            $data['user_phone'] .
+            $data['user_basket'] .
+            $data['no_installment'] .
+            $data['max_installment'] .
+            $data['timeout_limit'] .
+            $data['lang'];
         $data['hash_str'] = $hash_str;
         return $data;
     }
@@ -373,11 +395,11 @@ class PaymentService
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
-            'merchant_ok_url'=> $payload['ok_url'],
-            'merchant_fail_url'=> $payload['fail_url'],
+            'merchant_ok_url' => $payload['ok_url'],
+            'merchant_fail_url' => $payload['fail_url'],
             'user_basket'    => $this->encodeBasket($payload['basket']),
             'no_installment' => $payload['no_installment'] ?? 0,
-            'max_installment'=> $payload['max_installment'] ?? 0,
+            'max_installment' => $payload['max_installment'] ?? 0,
             'lang'           => $payload['lang'] ?? $config['default_lang'],
             'debug_on'       => $config['debug'] ? 1 : 0,
             'test_mode'      => $config['sandbox'] ? 1 : 0,

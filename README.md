@@ -39,7 +39,7 @@ Laravel için güncel, güvenli ve kapsamlı PayTR ödeme entegrasyon paketi. G�
 
 ```bash
 composer require developertugrul/paytr-laravel-client
-php artisan vendor:publish --provider="Paytr\\PaytrServiceProvider"
+php artisan vendor:publish --tag=paytr-config
 ```
 
 ## ⚙️ Konfigürasyon
@@ -60,6 +60,14 @@ PAYTR_VERIFY_SSL=true
 PAYTR_DIRECT_API_URL=https://www.paytr.com/odeme
 ```
 
+`PAYTR_SANDBOX` ayarı Direct API taleplerinde `test_mode` değerini otomatik olarak belirler.
+
+> **Not:** PayTR, `user_ip` değerinin gerçek IP adresi olmasını bekler ve bu
+> bilgiyi doğrular. Lokal geliştirme yaparken `request()->ip()` sonucu (örn.
+> `127.0.0.1`) geçersiz sayılır. Bu nedenle test ortamında `user_ip`
+> parametresini makinenizin **public IP** adresiyle (örneğin `.env` içinde
+> `PAYTR_USER_IP` tanımlayarak) göndermelisiniz. Bu uyarı PayTR
+> dokümantasyonunda da belirtilmektedir.
 
 `PAYTR_WEBHOOK_SECRET` mutlaka tanımlanmalıdır, aksi halde gelen webhook
 istekleri imza doğrulamasından geçmeyecek ve reddedilecektir.
@@ -110,7 +118,7 @@ use Paytr\Facades\Paytr;
 $response = Paytr::payment()->pay([
     'merchant_oid' => 'ORDER123',
     'email' => 'customer@example.com',
-    'amount' => 10000, // 100 TL
+    'payment_amount' => 10000, // 100 TL
     'currency' => 'TL',
     'user_name' => 'John Doe',
     'user_address' => 'İstanbul, Türkiye',
@@ -130,7 +138,7 @@ $response = Paytr::payment()->pay([
 $token = Paytr::payment()->createIframeToken([
     'merchant_oid' => 'ORDER123',
     'email' => 'customer@example.com',
-    'amount' => 10000,
+    'payment_amount' => 10000,
     'user_name' => 'John Doe',
     'user_address' => 'İstanbul, Türkiye',
     'user_phone' => '5551234567',

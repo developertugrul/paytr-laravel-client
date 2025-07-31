@@ -29,6 +29,8 @@ class ServicePayloadTest extends TestCase
             'merchant_id' => 'test_merchant_id',
             'merchant_key' => 'test_merchant_key',
             'merchant_salt' => 'test_merchant_salt',
+            'direct_api_url' => 'https://api.paytr.com/pay',
+            'sandbox' => false,
             'api_url' => 'https://api.paytr.com/v1/',
             'default_currency' => 'TL',
             'default_lang' => 'tr',
@@ -132,6 +134,22 @@ class ServicePayloadTest extends TestCase
                 'basket' => $basket,
                 'user_ip' => '1.1.1.1',
             ]]],
+            [PaymentService::class, 'pay', [[
+                'merchant_oid' => 'OIDPAY',
+                'email' => 'test@example.com',
+                'payment_amount' => 1000,
+                'currency' => 'TL',
+                'user_name' => 'User',
+                'user_address' => 'Addr',
+                'user_phone' => '123',
+                'ok_url' => 'https://ok',
+                'fail_url' => 'https://fail',
+                'basket' => $basket,
+                'installment_count' => 0,
+                'non_3d' => 0,
+                'payment_type' => 'card',
+                'user_ip' => '1.1.1.1',
+            ]]],
         ];
     }
 
@@ -170,7 +188,27 @@ class ServicePayloadTest extends TestCase
             case PaymentService::class . '::preProvision':
             case PaymentService::class . '::createEftIframe':
             case PaymentService::class . '::payWithBkmExpress':
-                return $params['merchant_id'] . $params['user_ip'] . $params['merchant_oid'] . $params['email'] . $params['payment_amount'] . $params['user_basket'] . $params['currency'] . $params['lang'];
+            case PaymentService::class . '::pay':
+                return $params['merchant_id']
+                    . $params['user_ip']
+                    . $params['merchant_oid']
+                    . $params['email']
+                    . $params['payment_amount']
+                    . $params['payment_type']
+                    . $params['installment_count']
+                    . $params['currency']
+                    . $params['test_mode']
+                    . $params['non_3d']
+                    . $params['merchant_ok_url']
+                    . $params['merchant_fail_url']
+                    . $params['user_name']
+                    . $params['user_address']
+                    . $params['user_phone']
+                    . $params['user_basket']
+                    . $params['no_installment']
+                    . $params['max_installment']
+                    . $params['timeout_limit']
+                    . $params['lang'];
         }
         return '';
     }
