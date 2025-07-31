@@ -325,7 +325,7 @@ class PaymentService
             'user_ip'        => $payload['user_ip'] ?? Request::ip(),
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
-            'payment_amount' => $payload['amount'],
+            'payment_amount' => $payload['payment_amount'], // Direct API'de 'payment_amount' kullanılır
             'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
@@ -347,7 +347,8 @@ class PaymentService
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
-        // Hash stringi PayTR dokümantasyonuna göre hazırlanır
+        // Direct API için hash string - PayTR dokümantasyonuna göre
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
         $hash_str = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['no_installment'] . $data['max_installment'] . $data['currency'] . $data['lang'];
         $data['hash_str'] = $hash_str;
         return $data;
@@ -367,7 +368,7 @@ class PaymentService
             'user_ip'        => $payload['user_ip'] ?? Request::ip(),
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
-            'payment_amount' => $payload['amount'],
+            'payment_amount' => $payload['payment_amount'], // iFrame API'de de 'payment_amount' kullanılır
             'currency'       => $payload['currency'] ?? $config['default_currency'],
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
@@ -383,7 +384,8 @@ class PaymentService
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
-        // Hash stringi PayTR dokümantasyonuna göre hazırlanır
+        // iFrame API için hash string - PayTR dokümantasyonuna göre
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
         $hash_str = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['no_installment'] . $data['max_installment'] . $data['currency'] . $data['lang'];
         $data['hash_str'] = $hash_str;
         return $data;
