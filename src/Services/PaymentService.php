@@ -7,6 +7,7 @@ use Paytr\Exceptions\PaytrException;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Client;
 
 /**
@@ -40,6 +41,14 @@ class PaymentService
     {
         $config = Config::get('paytr');
         $data = $this->preparePaymentData($payload, $config);
+
+        // Debug için hash string'i logla
+        if ($config['debug']) {
+            Log::info('PayTR Hash String: ' . $data['hash_str']);
+            Log::info('PayTR Merchant Key: ' . $config['merchant_key']);
+            Log::info('PayTR Merchant Salt: ' . $config['merchant_salt']);
+        }
+
         $signature = HashHelper::makeSignature($data['hash_str'], $config['merchant_key'], $config['merchant_salt']);
         $data['paytr_token'] = $signature;
         unset($data['hash_str']);
@@ -350,7 +359,7 @@ class PaymentService
         ];
 
         // Direct API için hash string - PayTR dokümantasyonuna göre
-        // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + payment_type + installment_count + currency + test_mode + non_3d
         $hash_str =
             $data['merchant_id'] .
             $data['user_ip'] .
@@ -361,17 +370,7 @@ class PaymentService
             $data['installment_count'] .
             $data['currency'] .
             $data['test_mode'] .
-            $data['non_3d'] .
-            $data['merchant_ok_url'] .
-            $data['merchant_fail_url'] .
-            $data['user_name'] .
-            $data['user_address'] .
-            $data['user_phone'] .
-            $data['user_basket'] .
-            $data['no_installment'] .
-            $data['max_installment'] .
-            $data['timeout_limit'] .
-            $data['lang'];
+            $data['non_3d'];
         $data['hash_str'] = $hash_str;
         return $data;
     }
@@ -408,7 +407,17 @@ class PaymentService
 
         // iFrame API için hash string - PayTR dokümantasyonuna göre
         // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
-        $hash_str = $data['merchant_id'] . $data['user_ip'] . $data['merchant_oid'] . $data['email'] . $data['payment_amount'] . $data['user_basket'] . $data['no_installment'] . $data['max_installment'] . $data['currency'] . $data['lang'];
+        $hash_str =
+            $data['merchant_id'] .
+            $data['user_ip'] .
+            $data['merchant_oid'] .
+            $data['email'] .
+            $data['payment_amount'] .
+            $data['user_basket'] .
+            $data['no_installment'] .
+            $data['max_installment'] .
+            $data['currency'] .
+            $data['lang'];
         $data['hash_str'] = $hash_str;
         return $data;
     }
