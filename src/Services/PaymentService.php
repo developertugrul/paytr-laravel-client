@@ -61,7 +61,11 @@ class PaymentService
         }
 
         $signature = HashHelper::makeSignature($data['hash_str'], $config['merchant_key'], $config['merchant_salt']);
-        $data['token'] = $signature; // Direct API'de 'token' kullanılır
+         // Direct API isteklerinde imza "paytr_token" parametresi ile iletilmelidir
+        // https://dev.paytr.com/direkt-api/direkt-api-1-adim dokümanında belirtildiği üzere
+        // paytr_token alanının eksik ya da hatalı olması durumunda "paytr_token gonderilmedi veya gecersiz"
+        // hatası alınır. Bu nedenle parametre adı "paytr_token" olarak kullanılmalıdır.
+        $data['paytr_token'] = $signature;
         unset($data['hash_str']);
 
         try {
