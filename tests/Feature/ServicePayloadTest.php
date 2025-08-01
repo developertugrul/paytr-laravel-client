@@ -54,7 +54,7 @@ class ServicePayloadTest extends TestCase
 
     public static function payloadProvider(): array
     {
-        $basket = [['name' => 'Prod', 'price' => 1000, 'quantity' => 1]];
+        $basket = [['Prod', '100.00', 1]];
         return [
             // CardService
             [CardService::class, 'storeCard', [[
@@ -137,17 +137,31 @@ class ServicePayloadTest extends TestCase
             [PaymentService::class, 'pay', [[
                 'merchant_oid' => 'OIDPAY',
                 'email' => 'test@example.com',
-                'payment_amount' => 1000,
+                'payment_amount' => 100.00,
                 'currency' => 'TL',
                 'user_name' => 'User',
                 'user_address' => 'Addr',
                 'user_phone' => '123',
-                'ok_url' => 'https://ok',
-                'fail_url' => 'https://fail',
+                'merchant_ok_url' => 'https://ok',
+                'merchant_fail_url' => 'https://fail',
                 'basket' => $basket,
                 'installment_count' => 0,
                 'non_3d' => 0,
                 'payment_type' => 'card',
+                'user_ip' => '1.1.1.1',
+                'request_exp_date' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+            ]]],
+            [PaymentService::class, 'createIframeToken', [[
+                'merchant_oid' => 'OIDIFRAME',
+                'email' => 'test@example.com',
+                'payment_amount' => 100.00,
+                'currency' => 'TL',
+                'user_name' => 'User',
+                'user_address' => 'Addr',
+                'user_phone' => '123',
+                'merchant_ok_url' => 'https://ok',
+                'merchant_fail_url' => 'https://fail',
+                'basket' => $basket,
                 'user_ip' => '1.1.1.1',
             ]]],
         ];
@@ -188,6 +202,25 @@ class ServicePayloadTest extends TestCase
             case PaymentService::class . '::preProvision':
             case PaymentService::class . '::createEftIframe':
             case PaymentService::class . '::payWithBkmExpress':
+                return $params['merchant_id']
+                    . $params['user_ip']
+                    . $params['merchant_oid']
+                    . $params['email']
+                    . $params['payment_amount']
+                    . $params['user_basket']
+                    . $params['currency']
+                    . $params['lang'];
+            case PaymentService::class . '::createIframeToken':
+                return $params['merchant_id']
+                    . $params['user_ip']
+                    . $params['merchant_oid']
+                    . $params['email']
+                    . $params['payment_amount']
+                    . $params['user_basket']
+                    . $params['no_installment']
+                    . $params['max_installment']
+                    . $params['currency']
+                    . $params['lang'];
             case PaymentService::class . '::pay':
                 return $params['merchant_id']
                     . $params['user_ip']
@@ -199,16 +232,7 @@ class ServicePayloadTest extends TestCase
                     . $params['currency']
                     . $params['test_mode']
                     . $params['non_3d']
-                    . $params['merchant_ok_url']
-                    . $params['merchant_fail_url']
-                    . $params['user_name']
-                    . $params['user_address']
-                    . $params['user_phone']
-                    . $params['user_basket']
-                    . $params['no_installment']
-                    . $params['max_installment']
-                    . $params['timeout_limit']
-                    . $params['lang'];
+                    . $params['request_exp_date'];
         }
         return '';
     }

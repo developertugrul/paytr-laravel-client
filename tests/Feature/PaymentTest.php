@@ -28,14 +28,14 @@ class PaymentTest extends TestCase
         $payload = [
             'merchant_oid' => 'TEST_ORDER_' . time(),
             'email' => 'test@example.com',
-            'payment_amount' => 10000,
+            'payment_amount' => 100.00,
             'user_name' => 'Test User',
             'user_address' => 'Test Address',
             'user_phone' => '5551234567',
-            'ok_url' => 'https://example.com/success',
-            'fail_url' => 'https://example.com/fail',
+            'merchant_ok_url' => 'https://example.com/success',
+            'merchant_fail_url' => 'https://example.com/fail',
             'basket' => [
-                ['name' => 'Test Product', 'price' => 10000, 'quantity' => 1],
+                ['Test Product', '100.00', 1],
             ],
         ];
 
