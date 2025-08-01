@@ -109,6 +109,21 @@ git push origin main --tags
 
 ## 🎯 Kullanım Örnekleri
 
+### 📦 Sepet Formatı
+
+PayTR API'de sepet verisi özel formatta gönderilmelidir:
+
+```php
+// PayTR Sepet Formatı: [['Ürün Adı', 'Fiyat', 'Adet'], ...]
+$basket = [
+    ['Test Ürün 1', '100.00', 1],     // [ürün_adı, fiyat, adet]
+    ['Test Ürün 2', '50.50', 2],      // [ürün_adı, fiyat, adet]
+    ['Test Ürün 3', '25.25', 3],      // [ürün_adı, fiyat, adet]
+];
+
+// Paket otomatik olarak sepeti base64_encode(json_encode(...)) ile kodlar
+```
+
 ### Temel Ödeme İşlemleri
 
 ```php
@@ -116,36 +131,56 @@ use Paytr\Facades\Paytr;
 
 // Direct API ile ödeme
 $response = Paytr::payment()->pay([
-    'merchant_oid' => 'ORDER123',
+    // Zorunlu parametreler (otomatik alınır: merchant_id, user_ip, test_mode, debug_on, client_lang)
+    'merchant_oid' => 'TEST_' . time(), // Benzersiz sipariş numarası
     'email' => 'customer@example.com',
-    'payment_amount' => 10000, // 100 TL
+    'payment_amount' => 100.00, // PayTR'de ondalık nokta kullanılır
+    'payment_type' => 'card',
+    'installment_count' => 0,
     'currency' => 'TL',
+    'non_3d' => 0,
+    'request_exp_date' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+    
+    // Müşteri bilgileri
     'user_name' => 'John Doe',
     'user_address' => 'İstanbul, Türkiye',
     'user_phone' => '5551234567',
-    'ok_url' => 'https://example.com/success',
-    'fail_url' => 'https://example.com/fail',
+    
+    // URL'ler (doğru isimlendirme)
+    'merchant_ok_url' => 'https://example.com/success',
+    'merchant_fail_url' => 'https://example.com/fail',
+    
+    // Sepet (PayTR formatında)
     'basket' => [
-        ['name' => 'Ürün 1', 'price' => 10000, 'quantity' => 1],
+        ['Test Ürün', '100.00', 1], // [ürün_adı, fiyat, adet]
     ],
-    'installment_count' => 0,
-    'non_3d' => 0,
-    // Süre sınırı isteğe bağlıdır, belirtilmezse PAYTR_DEFAULT_TIMEOUT kullanılır
-    'timeout_limit' => 0,
+
+    // Direct API için zorunlu kart bilgileri
+    'cc_owner' => 'John Doe',
+    'card_number' => '4355084355084358',
+    'expiry_month' => '12',
+    'expiry_year' => '25',
+    'cvv' => '000',
+
+    // Opsiyonel parametreler
+    'lang' => 'tr',
+    'sync_mode' => 0, // 0: async, 1: sync
+    'non3d_test_failed' => 0,
+    'card_type' => '', // Boş bırakılabilir
 ]);
 
 // iFrame API ile token oluşturma
 $token = Paytr::payment()->createIframeToken([
-    'merchant_oid' => 'ORDER123',
+    'merchant_oid' => 'TEST_' . time(),
     'email' => 'customer@example.com',
-    'payment_amount' => 10000,
+    'payment_amount' => 100.00,
     'user_name' => 'John Doe',
     'user_address' => 'İstanbul, Türkiye',
     'user_phone' => '5551234567',
-    'ok_url' => 'https://example.com/success',
-    'fail_url' => 'https://example.com/fail',
+    'merchant_ok_url' => 'https://example.com/success',
+    'merchant_fail_url' => 'https://example.com/fail',
     'basket' => [
-        ['name' => 'Ürün 1', 'price' => 10000, 'quantity' => 1],
+        ['Test Ürün', '100.00', 1], // [ürün_adı, fiyat, adet]
     ],
 ]);
 

@@ -336,7 +336,7 @@ class PaymentService
         }
     }
 
-    /**
+        /**
      * Ödeme için gerekli verileri hazırlar (Direct API)
      *
      * @param array $payload
@@ -345,36 +345,58 @@ class PaymentService
      */
     protected function preparePaymentData(array $payload, array $config): array
     {
+        // request_exp_date parametresi için varsayılan değer (1 saat sonra)
+        $requestExpDate = $payload['request_exp_date'] ?? date('Y-m-d H:i:s', strtotime('+1 hour'));
+
+        // Otomatik alınacak parametreler
         $data = [
+            // Zorunlu parametreler (config'den otomatik alınır)
             'merchant_id'    => $config['merchant_id'],
             'user_ip'        => $payload['user_ip'] ?? Request::ip(),
+            'test_mode'      => $config['sandbox'] ? 1 : 0,
+            'debug_on'       => $config['debug'] ? 1 : 0,
+            'client_lang'    => $payload['lang'] ?? $config['default_lang'],
+
+            // Kullanıcıdan alınan zorunlu parametreler
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
-            'payment_amount' => $payload['payment_amount'], // Direct API'de 'payment_amount' kullanılır
+            'payment_amount' => $payload['payment_amount'],
+            'payment_type'   => $payload['payment_type'] ?? 'card',
+            'installment_count' => $payload['installment_count'] ?? 0,
             'currency'       => $payload['currency'] ?? $config['default_currency'],
+            'non_3d'         => $payload['non_3d'] ?? 0,
+            'request_exp_date' => $requestExpDate,
+
+            // Müşteri bilgileri
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
-            'merchant_ok_url' => $payload['ok_url'],
-            'merchant_fail_url' => $payload['fail_url'],
+
+            // URL'ler (doğru isimlendirme ile)
+            'merchant_ok_url' => $payload['merchant_ok_url'] ?? $payload['ok_url'] ?? '',
+            'merchant_fail_url' => $payload['merchant_fail_url'] ?? $payload['fail_url'] ?? '',
+
+            // Sepet
             'user_basket'    => $this->encodeBasket($payload['basket']),
-            'no_installment' => $payload['no_installment'] ?? 0,
-            'max_installment' => $payload['max_installment'] ?? 0,
-            'lang'           => $payload['lang'] ?? $config['default_lang'],
-            'payment_type'   => $payload['payment_type'] ?? 'card',
+
+            // Kart bilgileri (Direct API için zorunlu)
             'cc_owner'       => $payload['cc_owner'] ?? '',
             'card_number'    => $payload['card_number'] ?? '',
             'expiry_month'   => $payload['expiry_month'] ?? '',
             'expiry_year'    => $payload['expiry_year'] ?? '',
             'cvv'            => $payload['cvv'] ?? '',
-            'installment_count' => $payload['installment_count'] ?? 0,
-            'non_3d'         => $payload['non_3d'] ?? 0,
-            'test_mode'      => $config['sandbox'] ? 1 : 0,
+
+            // Opsiyonel parametreler
+            'no_installment' => $payload['no_installment'] ?? 0,
+            'max_installment' => $payload['max_installment'] ?? 0,
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
+            'sync_mode'      => $payload['sync_mode'] ?? 0,
+            'non3d_test_failed' => $payload['non3d_test_failed'] ?? 0,
+            'card_type'      => $payload['card_type'] ?? '',
         ];
 
         // Direct API için hash string - PayTR dokümantasyonuna göre
-        // merchant_id + user_ip + merchant_oid + email + payment_amount + payment_type + installment_count + currency + test_mode + non_3d
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + payment_type + installment_count + currency + test_mode + non_3d + request_exp_date
         $hash_str =
             $data['merchant_id'] .
             $data['user_ip'] .
@@ -385,7 +407,8 @@ class PaymentService
             $data['installment_count'] .
             $data['currency'] .
             $data['test_mode'] .
-            $data['non_3d'];
+            $data['non_3d'] .
+            $data['request_exp_date'];
         $data['hash_str'] = $hash_str;
         return $data;
     }
@@ -399,24 +422,36 @@ class PaymentService
      */
     protected function prepareIframeData(array $payload, array $config): array
     {
+        // Otomatik alınacak parametreler
         $data = [
+            // Zorunlu parametreler (config'den otomatik alınır)
             'merchant_id'    => $config['merchant_id'],
             'user_ip'        => $payload['user_ip'] ?? Request::ip(),
+            'test_mode'      => $config['sandbox'] ? 1 : 0,
+            'debug_on'       => $config['debug'] ? 1 : 0,
+            'lang'           => $payload['lang'] ?? $config['default_lang'],
+
+            // Kullanıcıdan alınan zorunlu parametreler
             'merchant_oid'   => $payload['merchant_oid'],
             'email'          => $payload['email'],
-            'payment_amount' => $payload['payment_amount'], // iFrame API'de de 'payment_amount' kullanılır
+            'payment_amount' => $payload['payment_amount'],
             'currency'       => $payload['currency'] ?? $config['default_currency'],
+
+            // Müşteri bilgileri
             'user_name'      => $payload['user_name'],
             'user_address'   => $payload['user_address'],
             'user_phone'     => $payload['user_phone'],
-            'merchant_ok_url' => $payload['ok_url'],
-            'merchant_fail_url' => $payload['fail_url'],
+
+            // URL'ler (doğru isimlendirme ile)
+            'merchant_ok_url' => $payload['merchant_ok_url'] ?? $payload['ok_url'] ?? '',
+            'merchant_fail_url' => $payload['merchant_fail_url'] ?? $payload['fail_url'] ?? '',
+
+            // Sepet
             'user_basket'    => $this->encodeBasket($payload['basket']),
+
+            // Opsiyonel parametreler
             'no_installment' => $payload['no_installment'] ?? 0,
             'max_installment' => $payload['max_installment'] ?? 0,
-            'lang'           => $payload['lang'] ?? $config['default_lang'],
-            'debug_on'       => $config['debug'] ? 1 : 0,
-            'test_mode'      => $config['sandbox'] ? 1 : 0,
             'timeout_limit'  => $payload['timeout_limit'] ?? Config::get('paytr.default_timeout', 0),
         ];
 
@@ -574,6 +609,29 @@ class PaymentService
      */
     protected function encodeBasket(array $basket): string
     {
-        return base64_encode(json_encode($basket));
+        // PayTR sepet formatı: [["Ürün Adı", "Fiyat", "Adet"], ...]
+        $formattedBasket = [];
+
+        foreach ($basket as $item) {
+            if (is_array($item)) {
+                // Eğer zaten PayTR formatında ise
+                if (count($item) >= 3) {
+                    $formattedBasket[] = [
+                        $item[0], // Ürün adı
+                        number_format($item[1], 2, '.', ''), // Fiyat (ondalık nokta ile)
+                        (int)$item[2] // Adet
+                    ];
+                }
+            } else {
+                // Eğer obje formatında ise
+                $formattedBasket[] = [
+                    $item['name'] ?? $item['title'] ?? 'Ürün',
+                    number_format($item['price'] ?? $item['amount'] ?? 0, 2, '.', ''),
+                    (int)($item['quantity'] ?? 1)
+                ];
+            }
+        }
+
+        return base64_encode(json_encode($formattedBasket));
     }
 }

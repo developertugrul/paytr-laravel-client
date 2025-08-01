@@ -418,15 +418,27 @@ public function __construct(Paytr\Services\PaymentService $paymentService) {
         </div>
         <p><b>pay(array $payload): array</b> fonksiyonu, PayTR Direct API ile ödeme başlatmanızı sağlar. Direct API, kart bilgilerini sunucu tarafında işler ve 3D Secure doğrulaması gerektirir. Tüm zorunlu ve opsiyonel parametreler, dönüş değerleri ve hata yönetimi aşağıda detaylıca açıklanmıştır.</p>
         <h4>Parametreler</h4>
+        <div class="alert alert-info mb-3">
+          <strong>BİLGİ:</strong> Aşağıdaki parametreler otomatik olarak config'den alınır: <code>merchant_id</code>, <code>user_ip</code>, <code>test_mode</code>, <code>debug_on</code>, <code>client_lang</code>
+        </div>
         <ul>
           <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
           <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
-          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden, örn: 10000 = 100 TL).</li>
+          <li><b>payment_amount</b> <i>(float, zorunlu)</i>: Ödeme tutarı (ondalık nokta ile, örn: 100.00 = 100 TL).</li>
+          <li><b>payment_type</b> <i>(string, zorunlu)</i>: Ödeme tipi (varsayılan: 'card').</li>
+          <li><b>installment_count</b> <i>(int, zorunlu)</i>: Taksit sayısı (varsayılan: 0).</li>
+          <li><b>currency</b> <i>(string, zorunlu)</i>: Para birimi (varsayılan: TL).</li>
+          <li><b>non_3d</b> <i>(int, zorunlu)</i>: 3D Secure kullanımı (0: kullan, 1: kullanma).</li>
+          <li><b>request_exp_date</b> <i>(string, zorunlu)</i>: İstek son kullanma tarihi (Y-m-d H:i:s formatında).</li>
+
           <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
           <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
           <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
-          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
-          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
+
+          <li><b>merchant_ok_url</b> <i>(string, zorunlu)</i>: Başarılı ödeme sonrası yönlendirilecek URL.</li>
+          <li><b>merchant_fail_url</b> <i>(string, zorunlu)</i>: Başarısız ödeme sonrası yönlendirilecek URL.</li>
+
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. PayTR formatında: [['Ürün Adı', '100.00', 1]]</li>
 
           <li><b>cc_owner</b> <i>(string, zorunlu)</i>: Kart sahibi adı.</li>
           <li><b>card_number</b> <i>(string, zorunlu)</i>: Kart numarası (16 hane).</li>
@@ -434,13 +446,11 @@ public function __construct(Paytr\Services\PaymentService $paymentService) {
           <li><b>expiry_year</b> <i>(string, zorunlu)</i>: Son kullanma yılı (YY formatında, örn: "25").</li>
           <li><b>cvv</b> <i>(string, zorunlu)</i>: Kart güvenlik kodu (3-4 hane).</li>
 
-          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi (varsayılan: TL).</li>
-          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı (varsayılan: 0).</li>
-          <li><b>payment_type</b> <i>(string, opsiyonel)</i>: Ödeme tipi (varsayılan: 'card').</li>
           <li><b>lang</b> <i>(string, opsiyonel)</i>: Dil (varsayılan: tr).</li>
-          <li><b>ok_url</b> <i>(string, opsiyonel)</i>: Başarılı ödeme sonrası yönlendirilecek URL.</li>
-          <li><b>fail_url</b> <i>(string, opsiyonel)</i>: Başarısız ödeme sonrası yönlendirilecek URL.</li>
-          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+          <li><b>sync_mode</b> <i>(int, opsiyonel)</i>: Senkron modu (0: async, 1: sync).</li>
+          <li><b>non3d_test_failed</b> <i>(int, opsiyonel)</i>: Test modunda başarısız işlem (0: normal, 1: başarısız test).</li>
+          <li><b>card_type</b> <i>(string, opsiyonel)</i>: Kart tipi (bonus, axess, combo, vb.).</li>
+          <li><b>timeout_limit</b> <i>(int, opsiyonel)</i>: Zaman aşımı süresi (saniye).</li>
         </ul>
         <h4>Dönüş Değeri</h4>
         <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
@@ -454,15 +464,28 @@ public function __construct(Paytr\Services\PaymentService $paymentService) {
         <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
 
 $payload = [
-    'merchant_oid' => 'ORDER123',
+    // Zorunlu parametreler (otomatik alınır: merchant_id, user_ip, test_mode, debug_on, client_lang)
+    'merchant_oid' => 'TEST_' . time(), // Benzersiz sipariş numarası
     'email' => 'user@example.com',
-    'payment_amount' => 10000, // 100 TL (kuruş cinsinden)
+    'payment_amount' => 100.00, // PayTR'de ondalık nokta kullanılır
+    'payment_type' => 'card',
+    'installment_count' => 0,
+    'currency' => 'TL',
+    'non_3d' => 0,
+    'request_exp_date' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+
+    // Müşteri bilgileri
     'user_name' => 'Test Kullanıcı',
     'user_address' => 'Adres',
     'user_phone' => '5551234567',
-    'user_ip' => request()->ip(),
+
+    // URL'ler (doğru isimlendirme)
+    'merchant_ok_url' => 'https://site.com/success',
+    'merchant_fail_url' => 'https://site.com/fail',
+
+    // Sepet (PayTR formatında)
     'basket' => [
-        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+        ['Test Ürün', '100.00', 1], // [ürün_adı, fiyat, adet]
     ],
 
     // Direct API için zorunlu kart bilgileri
@@ -473,11 +496,10 @@ $payload = [
     'cvv' => '000',
 
     // Opsiyonel parametreler
-    'installment_count' => 0, // Tek çekim
-    'currency' => 'TL',
     'lang' => 'tr',
-    'ok_url' => 'https://site.com/success',
-    'fail_url' => 'https://site.com/fail',
+    'sync_mode' => 0, // 0: async, 1: sync
+    'non3d_test_failed' => 0,
+    'card_type' => '', // Boş bırakılabilir
 ];
 
 try {
@@ -522,21 +544,27 @@ $result = Paytr::payment()->pay($payload);
         </div>
         <p><b>createIframeToken(array $payload): array</b> fonksiyonu, PayTR iFrame API ile ödeme başlatmak için gerekli token'ı üretir. Bu token ile iFrame ödeme formunu sitenize kolayca entegre edebilirsiniz. iFrame API'de kart bilgileri kullanıcı tarafından PayTR'ın güvenli sayfasında girilir.</p>
         <h4>Parametreler</h4>
+        <div class="alert alert-info mb-3">
+          <strong>BİLGİ:</strong> Aşağıdaki parametreler otomatik olarak config'den alınır: <code>merchant_id</code>, <code>user_ip</code>, <code>test_mode</code>, <code>debug_on</code>, <code>lang</code>
+        </div>
         <ul>
           <li><b>merchant_oid</b> <i>(string, zorunlu)</i>: Siparişe özel benzersiz ID.</li>
           <li><b>email</b> <i>(string, zorunlu)</i>: Kullanıcı e-posta adresi.</li>
-          <li><b>payment_amount</b> <i>(int, zorunlu)</i>: Ödeme tutarı (Kuruş cinsinden, örn: 10000 = 100 TL).</li>
+          <li><b>payment_amount</b> <i>(float, zorunlu)</i>: Ödeme tutarı (ondalık nokta ile, örn: 100.00 = 100 TL).</li>
+          <li><b>currency</b> <i>(string, zorunlu)</i>: Para birimi (varsayılan: TL).</li>
+
           <li><b>user_name</b> <i>(string, zorunlu)</i>: Kullanıcı adı.</li>
           <li><b>user_address</b> <i>(string, zorunlu)</i>: Kullanıcı adresi.</li>
           <li><b>user_phone</b> <i>(string, zorunlu)</i>: Kullanıcı telefon numarası.</li>
-          <li><b>user_ip</b> <i>(string, zorunlu)</i>: Kullanıcı IP adresi.</li>
-          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
-          <li><b>ok_url</b> <i>(string, zorunlu)</i>: Başarılı ödeme sonrası yönlendirilecek URL.</li>
-          <li><b>fail_url</b> <i>(string, zorunlu)</i>: Başarısız ödeme sonrası yönlendirilecek URL.</li>
-          <li><b>currency</b> <i>(string, opsiyonel)</i>: Para birimi (varsayılan: TL).</li>
-          <li><b>installment_count</b> <i>(int, opsiyonel)</i>: Taksit sayısı (varsayılan: 0).</li>
-          <li><b>lang</b> <i>(string, opsiyonel)</i>: Dil (varsayılan: tr).</li>
-          <li><b>diğer opsiyonel parametreler</b>: PayTR API dokümantasyonuna göre eklenebilir.</li>
+
+          <li><b>merchant_ok_url</b> <i>(string, zorunlu)</i>: Başarılı ödeme sonrası yönlendirilecek URL.</li>
+          <li><b>merchant_fail_url</b> <i>(string, zorunlu)</i>: Başarısız ödeme sonrası yönlendirilecek URL.</li>
+
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. PayTR formatında: [['Ürün Adı', '100.00', 1]]</li>
+
+          <li><b>no_installment</b> <i>(int, opsiyonel)</i>: Taksit kullanımı (0: kullan, 1: kullanma).</li>
+          <li><b>max_installment</b> <i>(int, opsiyonel)</i>: Maksimum taksit sayısı.</li>
+          <li><b>timeout_limit</b> <i>(int, opsiyonel)</i>: Zaman aşımı süresi (saniye).</li>
         </ul>
         <h4>Dönüş Değeri</h4>
         <p>Başarılı işlemde aşağıdaki gibi bir dizi döner:</p>
@@ -550,18 +578,30 @@ $result = Paytr::payment()->pay($payload);
         <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
 
 $payload = [
-    'merchant_oid' => 'ORDER123',
+    // Zorunlu parametreler (otomatik alınır: merchant_id, user_ip, test_mode, debug_on, lang)
+    'merchant_oid' => 'TEST_' . time(), // Benzersiz sipariş numarası
     'email' => 'user@example.com',
-    'payment_amount' => 10000, // 100 TL (kuruş cinsinden)
+    'payment_amount' => 100.00, // PayTR'de ondalık nokta kullanılır
+    'currency' => 'TL',
+
+    // Müşteri bilgileri
     'user_name' => 'Test Kullanıcı',
     'user_address' => 'Adres',
     'user_phone' => '5551234567',
-    'user_ip' => request()->ip(),
+
+    // URL'ler (doğru isimlendirme)
+    'merchant_ok_url' => 'https://site.com/success',
+    'merchant_fail_url' => 'https://site.com/fail',
+
+    // Sepet (PayTR formatında)
     'basket' => [
-        ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
+        ['Test Ürün', '100.00', 1], // [ürün_adı, fiyat, adet]
     ],
-    'ok_url' => 'https://site.com/success',
-    'fail_url' => 'https://site.com/fail',
+
+    // Opsiyonel parametreler
+    'no_installment' => 0, // Taksit kullan
+    'max_installment' => 12, // Maksimum 12 taksit
+    'timeout_limit' => 0, // Zaman aşımı yok
     // iFrame API'de kart bilgileri gerekmez
 ];
 
@@ -1017,32 +1057,62 @@ $result = Paytr::payment()->payWithBkmExpress($payload);
       </section>
       <section id="sepet-kodlama" class="mt-5">
         <h2>Sepet Kodlama (encodeBasket)</h2>
-        <p><b>encodeBasket(array $basket): string</b> fonksiyonu, ödeme işlemlerinde kullanılacak sepet dizisini PayTR API'nin beklediği şekilde base64 ile kodlar.</p>
+        <p><b>encodeBasket(array $basket): string</b> fonksiyonu, sepet verilerini PayTR API'nin beklediği formatta kodlar.</p>
+        <h4>PayTR Sepet Formatı</h4>
+        <div class="alert alert-info mb-3">
+          <strong>BİLGİ:</strong> PayTR API'de sepet verisi özel formatta gönderilmelidir: <code>[['Ürün Adı', 'Fiyat', 'Adet'], ...]</code>
+        </div>
         <div class="alert alert-warning mt-3">
-          <strong>Not:</strong> <code>encodeBasket</code> metodu doğrudan çağrılamaz. Bu metot <b>protected</b> olarak tanımlıdır ve genellikle ödeme işlemleri sırasında paket tarafından otomatik olarak kullanılır. Dışarıdan erişmek isterseniz, kendi yardımcı fonksiyonunuzu yazabilir veya paketi fork edip metodu public yapabilirsiniz.
+          <strong>Not:</strong> <code>encodeBasket</code> metodu doğrudan çağrılamaz. Bu metot <b>protected</b> olarak tanımlıdır ve genellikle ödeme işlemleri sırasında paket tarafından otomatik olarak kullanılır.
         </div>
         <h4>Parametreler</h4>
         <ul>
-          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. Her ürün için ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1]</li>
+          <li><b>basket</b> <i>(array, zorunlu)</i>: Sepet içeriği. PayTR formatında: [['Ürün Adı', '100.00', 1]]</li>
         </ul>
         <h4>Dönüş Değeri</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// <b>UYARI:</b> Bu örnek doğrudan çalışmaz, encodeBasket protected olduğu için dışarıdan erişilemez.
-// $encoded = Paytr::payment()->encodeBasket($basket);
-// $encoded: base64 kodlu sepet
-</code></pre></div>
+        <p>Base64 ile kodlanmış sepet verisi döner.</p>
         <h4>Örnek: Sepet Kodlama</h4>
         <div class="alert alert-info mb-2">
           <b>Not:</b> Sepet kodlama işlemi ödeme fonksiyonları tarafından otomatik olarak yapılır. Kendi kodunuzda kullanmak isterseniz, aşağıdaki gibi bir yardımcı fonksiyon yazabilirsiniz:
         </div>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">function encodeBasket(array $basket): string {
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// PayTR Sepet Formatı: [['Ürün Adı', 'Fiyat', 'Adet'], ...]
+$basket = [
+    ['Test Ürün 1', '100.00', 1],     // [ürün_adı, fiyat, adet]
+    ['Test Ürün 2', '50.50', 2],      // [ürün_adı, fiyat, adet]
+    ['Test Ürün 3', '25.25', 3],      // [ürün_adı, fiyat, adet]
+];
+
+function encodeBasket(array $basket): string {
     return base64_encode(json_encode($basket));
 }
-$basket = [
-    ['name' => 'Ürün', 'price' => 10000, 'quantity' => 1],
-    ['name' => 'Diğer Ürün', 'price' => 5000, 'quantity' => 2],
-];
+
 $encoded = encodeBasket($basket);
 </code></pre></div>
+        <h4>Desteklenen Formatlar</h4>
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">// 1. PayTR Formatı (Önerilen)
+$basket = [
+    ['Ürün Adı', '100.00', 1],
+];
+
+// 2. Obje Formatı (Otomatik dönüştürülür)
+$basket = [
+    ['name' => 'Ürün Adı', 'price' => 100.00, 'quantity' => 1],
+];
+
+// 3. Karma Format
+$basket = [
+    ['Ürün 1', '100.00', 1],
+    ['name' => 'Ürün 2', 'price' => 50.00, 'quantity' => 2],
+];
+</code></pre></div>
+        <h4>Ek Notlar</h4>
+        <ul>
+          <li>Sepet verisi <b>base64_encode(json_encode(...))</b> ile otomatik kodlanır.</li>
+          <li>PayTR API, kodlanmış sepet verisini bekler.</li>
+          <li>Sepet içeriği, ödeme tutarı ile uyumlu olmalıdır.</li>
+          <li>Fiyatlar ondalık nokta (.) ile gösterilmelidir.</li>
+          <li>Paket otomatik olarak farklı formatları PayTR formatına dönüştürür.</li>
+        </ul>
       </section>
       <section id="iade" class="mt-5">
         <h2>İade (refund)</h2>
