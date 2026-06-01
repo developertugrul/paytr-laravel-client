@@ -343,10 +343,11 @@ PAYTR_MERCHANT_SALT=your_merchant_salt
 PAYTR_SANDBOX=true
 PAYTR_DEBUG=true
 
-# API URL'leri
-PAYTR_API_URL=https://www.paytr.com/odeme/api/
+# API URL'leri (Güncel PayTR API Uç Noktaları)
 PAYTR_DIRECT_API_URL=https://www.paytr.com/odeme
 PAYTR_IFRAME_API_URL=https://www.paytr.com/odeme/api/get-token
+PAYTR_REFUND_API_URL=https://www.paytr.com/odeme/iade
+PAYTR_STATUS_API_URL=https://www.paytr.com/odeme/durum-sorgu
 
 # Webhook ayarları
 PAYTR_WEBHOOK_SECRET=your_webhook_secret
@@ -1816,41 +1817,46 @@ if ($isValid) {
 </code></pre></div>
       </section>
       <section id="middleware-verify-signature" class="mt-5">
-        <h2>paytr.signature Middleware</h2>
-        <p>Webhook endpoint'lerinde gelen isteğin imzasını doğrulayan middleware'dir.</p>
+        <h2>Callback Doğrulama (validateCallback)</h2>
+        <p>PayTR, 2. Adım (Bildirim URL) işleminde ödeme sonucunu sitenize bir POST isteği ile iletir. Güvenlik gereği bu isteğin gerçekten PayTR'dan geldiğini doğrulamanız zorunludur.</p>
         <h4>Kullanım</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Route::post('/webhook', [WebhookController::class, 'handle'])
-    ->middleware('paytr.signature');
-</code></pre></div>
-        <h4>Çalışma Prensibi</h4>
-        <ul>
-          <li>İstekten gelen <b>X-PayTR-Signature</b> header'ı ve payload, config'deki <b>webhook_secret</b> ile doğrulanır.</li>
-          <li>Doğrulama başarısızsa 403, secret eksikse 500 döner.</li>
-        </ul>
-        <h4>Örnek: Hatalı İmza</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-bash">curl -X POST /webhook -H "X-PayTR-Signature: yanlis" -d '{...}'</code></pre></div>
-      </section>
-      <section id="webhook-controller" class="mt-5">
-        <h2>WebhookController</h2>
-        <p>PayTR tarafından gönderilen webhook bildirimlerini işler. IP ve signature doğrulaması yapar, ilgili event'i tetikler.</p>
-        <h4>Örnek Route</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">Route::post('/webhook', [WebhookController::class, 'handle'])
-    ->middleware('paytr.signature');
-</code></pre></div>
-        <h4>Çalışma Prensibi</h4>
-        <ul>
-          <li>IP kısıtlaması ve signature doğrulaması yapılır.</li>
-          <li>Payload JSON parse edilir, event türüne göre ilgili event tetiklenir.</li>
-          <li>Hatalı veya yetkisiz istekler loglanır ve uygun HTTP kodları ile yanıtlanır.</li>
-        </ul>
-        <h4>Örnek: Webhook Payload</h4>
-        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-json">{
-  "event": "payment_success",
-  "merchant_oid": "ORDER123",
-  "amount": 10000,
-  // ... diğer alanlar
+        <div class="position-relative"><button class="copy-btn" data-copy>kopyala</button><pre><code class="language-php">use Paytr\Facades\Paytr;
+use Illuminate\Http\Request;
+
+public function handleCallback(Request $request)
+{
+    // Gelen isteği doğrula
+    $isValid = Paytr::payment()->validateCallback($request->all());
+
+    if (!$isValid) {
+        return response('Bad Hash', 400); // Hatalı imza ise reddet
+    }
+
+    // İmza doğruysa, ödeme durumunu kontrol et
+    if ($request->post('status') == 'success') {
+        // Ödeme başarılı, siparişi onayla
+    } else {
+        // Ödeme başarısız, siparişi iptal et
+    }
+
+    return response('OK'); // PayTR'a işlemin alındığını bildir (ZORUNLU)
 }
 </code></pre></div>
+        <h4>Çalışma Prensibi</h4>
+        <ul>
+          <li>Gelen POST isteğindeki <code>merchant_oid</code>, <code>status</code>, ve <code>total_amount</code> değerleri, <code>merchant_salt</code> ile birleştirilerek PayTR'ın beklediği şifreleme algoritmasıyla hash'lenir.</li>
+          <li>Oluşturulan hash, PayTR tarafından gönderilen <code>hash</code> değeri ile karşılaştırılır.</li>
+        </ul>
+      </section>
+      <section id="webhook-controller" class="mt-5">
+        <h2>Webhook / Bildirim URL Yönetimi</h2>
+        <p>Ödemenin tamamlandığını yalnızca PayTR'ın 2. adım bildirimi ile anlamalısınız. Kullanıcının iFrame'den dönüş URL'sine yönlenmesi ödemenin kesin başarılı olduğu anlamına gelmez.</p>
+        <h4>Önemli Kurallar</h4>
+        <ul>
+          <li>PayTR bildirimlerine <b>her zaman <code>OK</code> metnini (string) döndürmelisiniz</b>. Aksi halde PayTR, sitenize yanıt alamadığını düşünüp aynı bildirimi tekrar tekrar gönderir.</li>
+          <li>Siparişi veritabanında güncellemeden önce mutlaka <code>validateCallback</code> ile güvenlik kontrolünü yapın.</li>
+          <li>Yalnızca PayTR'ın IP adreslerinden gelen isteklere izin vererek güvenliğinizi artırabilirsiniz.</li>
+        </ul>
       </section>
       <section id="testler-detay" class="mt-5">
         <h2>Testler (Detaylı)</h2>
