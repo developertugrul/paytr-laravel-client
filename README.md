@@ -2,7 +2,7 @@
 >
 > Bu paketin tüm fonksiyonlarını, kullanım senaryolarını ve testlerini detaylıca incelemek için modern, interaktif HTML dokümantasyonunu kullanabilirsiniz:
 >
-> - `html/index.html` dosyasını tarayıcınızda açın.
+> - `docs/index.html` dosyasını tarayıcınızda açın.
 > - Veya çevrimiçi olarak: [https://developertugrul.github.io/paytr-laravel-client/](https://developertugrul.github.io/paytr-laravel-client/)
 >
 > **Not:** Bu paket MIT lisansı ile yayınlanmıştır ve tamamen açık kaynaklıdır (opensource). Dilediğiniz gibi kullanabilir, dağıtabilir ve geliştirebilirsiniz.
@@ -71,41 +71,6 @@ PAYTR_DIRECT_API_URL=https://www.paytr.com/odeme
 
 `PAYTR_WEBHOOK_SECRET` mutlaka tanımlanmalıdır, aksi halde gelen webhook
 istekleri imza doğrulamasından geçmeyecek ve reddedilecektir.
-
-
-## 🔄 Versiyon Yönetimi
-
-Bu paket için versiyon yönetimi otomatik olarak yapılmaktadır. Yeni bir versiyon yayınlamak için:
-
-### Otomatik Versiyon Güncelleme
-
-```bash
-# Patch versiyonu (hata düzeltmeleri) - 1.0.0 -> 1.0.1
-php version-update.php patch
-
-# Minor versiyonu (yeni özellikler) - 1.0.0 -> 1.1.0
-php version-update.php minor
-
-# Major versiyonu (büyük değişiklikler) - 1.0.0 -> 2.0.0
-php version-update.php major
-```
-
-### Manuel Versiyon Güncelleme
-
-1. `composer.json` dosyasındaki `version` alanını güncelleyin
-2. Git tag oluşturun:
-```bash
-git add composer.json
-git commit -m "Bump version to 1.0.1"
-git tag -a v1.0.1 -m "Version 1.0.1"
-git push origin main --tags
-```
-
-### Versiyon Semantik Anlamları
-
-- **Patch (1.0.0 -> 1.0.1)**: Hata düzeltmeleri, güvenlik yamaları
-- **Minor (1.0.0 -> 1.1.0)**: Yeni özellikler, geriye uyumlu değişiklikler
-- **Major (1.0.0 -> 2.0.0)**: Büyük değişiklikler, geriye uyumsuz güncellemeler
 
 ## 🎯 Kullanım Örnekleri
 
