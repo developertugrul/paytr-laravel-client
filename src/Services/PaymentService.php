@@ -633,4 +633,30 @@ class PaymentService
 
         return base64_encode(json_encode($formattedBasket));
     }
+
+    /**
+     * PayTR 2. Adım (Bildirim URL) Callback doğrulamasını yapar.
+     * Gelen POST verilerindeki hash'in geçerli olup olmadığını kontrol eder.
+     *
+     * @param array $postData Gelen POST isteği verileri
+     * @return bool
+     */
+    public function validateCallback(array $postData): bool
+    {
+        $config = Config::get('paytr');
+        
+        if (!isset($postData['hash'], $postData['merchant_oid'], $postData['status'], $postData['total_amount'])) {
+            return false;
+        }
+
+        $expectedHash = HashHelper::makeCallbackSignature(
+            $postData['merchant_oid'],
+            $config['merchant_salt'],
+            $postData['status'],
+            $postData['total_amount'],
+            $config['merchant_key']
+        );
+
+        return hash_equals($expectedHash, $postData['hash']);
+    }
 }

@@ -107,10 +107,22 @@ class LinkService
      * @param string $signature
      * @return bool
      */
-    public function verifyCallback(array $payload, string $signature): bool
+    public function verifyCallback(array $payload, string $signature = ''): bool
     {
         $config = Config::get('paytr');
-        $expectedSignature = hash_hmac('sha256', json_encode($payload), $config['webhook_secret']);
+        if (isset($payload['hash']) && empty($signature)) {
+            $signature = $payload['hash'];
+        }
+        if (!isset($payload['merchant_oid'], $payload['status'], $payload['total_amount'])) {
+            return false;
+        }
+        $expectedSignature = HashHelper::makeCallbackSignature(
+            $payload['merchant_oid'],
+            $config['merchant_salt'],
+            $payload['status'],
+            $payload['total_amount'],
+            $config['merchant_key']
+        );
         return hash_equals($expectedSignature, $signature);
     }
 
