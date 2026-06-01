@@ -12,8 +12,13 @@ return [
 
     // API Endpoints
     'api_url'        => env('PAYTR_API_URL', 'https://www.paytr.com/odeme/api/'),
-    'direct_api_url' => env('PAYTR_DIRECT_API_URL', 'https://www.paytr.com/odeme'),
     'iframe_api_url' => env('PAYTR_IFRAME_API_URL', 'https://www.paytr.com/odeme/api/get-token'),
+    'direct_api_url' => env('PAYTR_DIRECT_API_URL', 'https://www.paytr.com/odeme'),
+    'refund_api_url' => env('PAYTR_REFUND_API_URL', 'https://www.paytr.com/odeme/iade'),
+    'status_api_url' => env('PAYTR_STATUS_API_URL', 'https://www.paytr.com/odeme/durum-sorgu'),
+    'card_api_url'   => env('PAYTR_CARD_API_URL', 'https://www.paytr.com/odeme/api/card'), // Varsayımsal PayTR kart API
+    'link_api_url'   => env('PAYTR_LINK_API_URL', 'https://www.paytr.com/odeme/api/link'),
+    'platform_api_url'=> env('PAYTR_PLATFORM_API_URL', 'https://www.paytr.com/odeme/api/platform'),
 
     // Webhook ayarları
     'webhook_secret' => env('PAYTR_WEBHOOK_SECRET'),

@@ -144,7 +144,7 @@ class PaymentService
         $hashStr = $data['merchant_id'] . $data['merchant_oid'];
         $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
-            $response = $this->http->post($config['api_url'] . 'payment/status', [
+            $response = $this->http->post($config['status_api_url'], [
                 'form_params' => $data,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -181,7 +181,7 @@ class PaymentService
         $hashStr = $data['merchant_id'] . $data['bin_number'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
-            $response = $this->http->post($config['api_url'] . 'installment/rates', [
+            $response = $this->http->post($config['api_url'] . 'taksit-oranlari', [
                 'form_params' => $data,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -215,7 +215,7 @@ class PaymentService
         $hashStr = $data['merchant_id'] . $data['bin_number'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
-            $response = $this->http->post($config['api_url'] . 'bin/lookup', [
+            $response = $this->http->post($config['api_url'] . 'bin-detail', [
                 'form_params' => $data,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -396,7 +396,7 @@ class PaymentService
         ];
 
         // Direct API için hash string - PayTR dokümantasyonuna göre
-        // merchant_id + user_ip + merchant_oid + email + payment_amount + payment_type + installment_count + currency + test_mode + non_3d + request_exp_date
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + payment_type + installment_count + currency + test_mode + non_3d
         $hash_str =
             $data['merchant_id'] .
             $data['user_ip'] .
@@ -407,8 +407,7 @@ class PaymentService
             $data['installment_count'] .
             $data['currency'] .
             $data['test_mode'] .
-            $data['non_3d'] .
-            $data['request_exp_date'];
+            $data['non_3d'];
         $data['hash_str'] = $hash_str;
         return $data;
     }
@@ -456,7 +455,7 @@ class PaymentService
         ];
 
         // iFrame API için hash string - PayTR dokümantasyonuna göre
-        // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + lang
+        // merchant_id + user_ip + merchant_oid + email + payment_amount + user_basket + no_installment + max_installment + currency + test_mode
         $hash_str =
             $data['merchant_id'] .
             $data['user_ip'] .
@@ -467,7 +466,7 @@ class PaymentService
             $data['no_installment'] .
             $data['max_installment'] .
             $data['currency'] .
-            $data['lang'];
+            $data['test_mode'];
         $data['hash_str'] = $hash_str;
         return $data;
     }

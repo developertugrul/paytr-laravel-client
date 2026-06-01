@@ -75,7 +75,7 @@ class RefundService
         $data['paytr_token'] = HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
 
         try {
-            $response = $this->http->post($config['api_url'] . 'refund', [
+            $response = $this->http->post($config['refund_api_url'], [
                 'form_params' => $data,
                 'headers' => [
                     'Accept' => 'application/json',
@@ -112,7 +112,7 @@ class RefundService
         $hashStr = $data['merchant_id'] . $data['merchant_oid'];
         $data['paytr_token'] = \Paytr\Helpers\HashHelper::makeSignature($hashStr, $config['merchant_key'], $config['merchant_salt']);
         try {
-            $response = $this->http->post($config['api_url'] . 'refund/status', [
+            $response = $this->http->post($config['status_api_url'], [
                 'form_params' => $data,
                 'headers' => [
                     'Accept' => 'application/json',
