@@ -3,7 +3,7 @@
 > Bu paketin tüm fonksiyonlarını, kullanım senaryolarını ve testlerini detaylıca incelemek için modern, interaktif HTML dokümantasyonunu kullanabilirsiniz:
 >
 > - `html/index.html` dosyasını tarayıcınızda açın.
-> - Veya çevrimiçi olarak: [https://tugrulyildirim.com/opensource/paytr-laravel-client](https://tugrulyildirim.com/opensource/paytr-laravel-client)
+> - Veya çevrimiçi olarak: [https://developertugrul.github.io/paytr-laravel-client/](https://developertugrul.github.io/paytr-laravel-client/)
 >
 > **Not:** Bu paket MIT lisansı ile yayınlanmıştır ve tamamen açık kaynaklıdır (opensource). Dilediğiniz gibi kullanabilir, dağıtabilir ve geliştirebilirsiniz.
 
